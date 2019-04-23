@@ -1,0 +1,16 @@
+{
+  "name": "webpack-extension-reloader",
+  "version": "0.0.1",
+  "description": "Hot reloading while developing browsers extensions with webpack",
+  "main": "dist/main.js",
+  "repository": "https://github.com/rubenspgcavalcante/webpack-extension-reloader.git",
+  "author": "Rubens Pinheiro Gonçalves Cavalcante",
+  "license": "MIT",
+  "scripts": {
+    "build": "NODE_ENV=production webpack --mode production"
+  },
+  "devDependencies": {
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.1"
+  }
+}
