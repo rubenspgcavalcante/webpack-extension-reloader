@@ -1,0 +1,15 @@
+{
+  "rules": {
+    "no-eval": true,
+    "arrow-parens": [true, "ban-single-arg-parens"],
+    "indent": [true, "spaces"],
+    "no-duplicate-variable": true,
+    "one-line": [true, "check-open-brace", "check-whitespace"],
+    "variable-name": [true, "ban-keywords"],
+    "triple-equals": [true, "allow-null-check"],
+    "extends": [
+      "tslint:latest",
+      "tslint-config-prettier"
+    ]
+  }
+}
