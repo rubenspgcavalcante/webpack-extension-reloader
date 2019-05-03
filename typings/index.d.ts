@@ -37,14 +37,13 @@ declare interface Source {
   updateHash(hash: string): void;
 }
 
-declare type SourceFactory = (
-  concatSource: string,
-  rootSource: string
-) => Source;
+declare type SourceFactory = (...sources: (string|Source)[]) => Source;
 
 declare type WebpackChunk = { files: Array<string>; name: string, hash: string };
 
 declare type ClientEvent = { type: string; payload: any };
+
+declare type BrowserVersion = [number, number, number];
 
 declare module "*.json" {
   const json: any;

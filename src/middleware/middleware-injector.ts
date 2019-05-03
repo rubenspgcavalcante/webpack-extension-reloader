@@ -1,14 +1,17 @@
-import { ConcatSource } from "webpack-sources";
+import { SourceMapSource, ConcatSource } from "webpack-sources";
 import middleWareSourceBuilder from "./middleware-source-builder";
 import { EntriesOption } from "webpack-extension-reloader";
+
+import webExtensionPolyfillCode from "raw-loader!webextension-polyfill";
+import webExtensionPolyfillMap from "raw-loader!webextension-polyfill/dist/browser-polyfill.js.map";
 
 export default function middlewareInjector(
   { background, contentScript }: EntriesOption,
   { port, reloadPage }: MiddlewareTemplateParams
 ) {
-  const source = middleWareSourceBuilder({ port, reloadPage });
-  const sourceFactory: SourceFactory = (...sources): Source =>
-    new ConcatSource(...sources);
+  const source: Source = middleWareSourceBuilder({ port, reloadPage });
+  const polyfillSource: Source = new SourceMapSource(webExtensionPolyfillCode, 'webextension-polyfill', webExtensionPolyfillMap);
+  const sourceFactory: SourceFactory = (...sources): Source => new ConcatSource(...sources);
 
   return (assets: object, chunks: WebpackChunk[]) =>
     chunks.reduce((prev, { name, files }) => {
@@ -19,7 +22,8 @@ export default function middlewareInjector(
       ) {
         files.forEach(entryPoint => {
           if (/\.js$/.test(entryPoint)) {
-            prev[entryPoint] = sourceFactory(source, assets[entryPoint]);
+            const src = sourceFactory(source, polyfillSource, assets[entryPoint]);
+            prev[entryPoint] = src;
           }
         });
       }

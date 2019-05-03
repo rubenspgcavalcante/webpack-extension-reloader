@@ -1,10 +1,11 @@
 import { Server } from "ws";
+import { parse } from "useragent";
 import { info } from "../utils/logger";
 import SignEmitter from "./SignEmitter";
 
 export default class HotReloaderServer {
   private _server: Server;
-  private _signEmiter: SignEmitter;
+  private _signEmitter: SignEmitter;
 
   constructor(port: number) {
     this._server = new Server({ port });
@@ -12,11 +13,11 @@ export default class HotReloaderServer {
 
   listen() {
     this._server.on("connection", (ws, msg) => {
-      const browserVersion = this._getBrowserVersion(msg.headers["user-agent"]);
-      this._signEmiter = new SignEmitter(this._server, browserVersion);
+      const userAgent = parse(msg.headers["user-agent"]);
+      this._signEmitter = new SignEmitter(this._server, userAgent);
 
       ws.on("message", (data: string) =>
-        info(`Message from the client: ${JSON.parse(data).payload}`)
+        info(`Message from ${userAgent.family}: ${JSON.parse(data).payload}`)
       );
       ws.on("error", () => {
         // NOOP - swallow socket errors due to http://git.io/vbhSN
@@ -25,16 +26,8 @@ export default class HotReloaderServer {
   }
 
   signChange(reloadPage: boolean): Promise<any> {
-    if (this._signEmiter) {
-      return this._signEmiter.safeSignChange(reloadPage);
+    if (this._signEmitter) {
+      return this._signEmitter.safeSignChange(reloadPage);
     } else return Promise.resolve(null);
-  }
-
-  private _getBrowserVersion(userAgent) {
-    const ver = userAgent.match(/\ Chrom(e|ium)\/([0-9\.]*)\ /);
-    if (ver && ver.length === 3) {
-      return ver[2];
-    }
-    return false;
   }
 }

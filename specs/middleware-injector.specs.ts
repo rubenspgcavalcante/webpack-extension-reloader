@@ -1,3 +1,4 @@
+import { RawSource } from "webpack-sources";
 import { assert } from "chai";
 import { stub } from "sinon";
 
@@ -10,7 +11,7 @@ describe("middleware-injector", () => {
   const sourceCode = "console.log('I am a middleware!!!');";
 
   stub(middlewareSourceBuilder, "default").callsFake(
-    opts => sourceCode
+    opts => new RawSource(sourceCode)
   );
 
   const sourceFactory = stub().callsFake((toConcat: string, file) => ({

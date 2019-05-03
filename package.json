@@ -19,9 +19,9 @@
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "test": "NODE_ENV=test webpack && mocha dist/tests.js",
-    "watch": "NODE_ENV=development webpack --watch",
     "analyze": "NODE_ENV=production webpack --env.analyze",
-    "sample": "NODE_ENV=development webpack --config sample/webpack.plugin.js --watch",
+    "start:dev": "NODE_ENV=development webpack --watch",
+    "start:sample": "NODE_ENV=development webpack --config sample/webpack.plugin.js --watch",
     "prepublish": "yarn build",
     "format": "prettier --write \"{src,client}/**/*.ts\""
   },
@@ -43,6 +43,8 @@
     "colors": "^1.1.2",
     "lodash": "^4.17.4",
     "minimist": "^1.2.0",
+    "useragent": "^2.3.0",
+    "webextension-polyfill": "^0.4.0",
     "webpack-sources": "^1.0.1",
     "ws": "^7.0.0"
   },
@@ -64,6 +66,7 @@
     "@types/minimist": "^1.2.0",
     "@types/mocha": "^5.2.5",
     "@types/sinon": "^7.0.0",
+    "@types/useragent": "^2.1.1",
     "@types/webpack": "^4.4.27",
     "@types/ws": "^6.0.1",
     "autoprefixer": "^9.3.1",

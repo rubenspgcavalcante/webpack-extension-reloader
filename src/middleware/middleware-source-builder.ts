@@ -1,21 +1,22 @@
 import { template } from "lodash";
+import { RawSource } from "webpack-sources";
+import rawSource from "raw-loader!./wer-middleware.raw";
 import {
   RECONNECT_INTERVAL,
   SOCKET_ERR_CODE_REF
 } from "../constants/midleware-config.constants";
 import * as signals from "../utils/signals";
-import rawSource from "raw-loader!./wer-middleware.raw";
 
 export default function middleWareSourceBuilder({
   port,
   reloadPage
-}: MiddlewareTemplateParams): string {
+}: MiddlewareTemplateParams): Source {
   const tmpl = template(rawSource);
 
-  return tmpl({
+  return new RawSource(tmpl({
     WSHost: `ws://localhost:${port}`,
     reloadPage: `${reloadPage}`,
     signals: JSON.stringify(signals),
     config: JSON.stringify({ RECONNECT_INTERVAL, SOCKET_ERR_CODE_REF })
-  });
+  }));
 }

@@ -147,7 +147,7 @@ yarn build
 
  And then run:  
  ```
- yarn sample
+ yarn start:sample
  ```
  
  This will make the webpack run in watch mode for the sample plugin source and output the built files on the "dist"

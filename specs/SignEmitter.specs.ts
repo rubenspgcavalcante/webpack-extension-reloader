@@ -1,4 +1,5 @@
 import SignEmitter from "../src/hot-reload/SignEmitter";
+import { Agent } from "useragent";
 import { assert } from "chai";
 import { spy, SinonSpy } from "sinon";
 import * as blockProtection from "../src/utils/block-protection";
@@ -12,11 +13,11 @@ import {
   NEW_FAST_RELOAD_DEBOUNCING_FRAME,
   NEW_FAST_RELOAD_CALLS
 } from "../src/constants/fast-reloading.constants";
-import { browserVerWrongFormatMsg } from "../src/messages/warnings";
 
 describe("SignEmitter", () => {
   let mockedServer: any;
-  let debouncerSpy: SinonSpy;
+  let mockedAgent: Partial<Agent>;
+  let debounceSpy: SinonSpy;
   let warnSpy: SinonSpy;
   let fastReloadBlockerSpy: SinonSpy;
 
@@ -24,20 +25,21 @@ describe("SignEmitter", () => {
     mockedServer = {
       clients: []
     };
-    debouncerSpy = spy(blockProtection, "debounceSignal");
+    mockedAgent = { family: "Chrome", major: "0", minor: "0", patch: "0" };
+    debounceSpy = spy(blockProtection, "debounceSignal");
     warnSpy = spy(logger, "warn");
     fastReloadBlockerSpy = spy(blockProtection, "fastReloadBlocker");
   });
   afterEach(() => {
-    debouncerSpy.restore();
+    debounceSpy.restore();
     fastReloadBlockerSpy.restore();
     warnSpy.restore();
   });
 
-  it("Should setup signal debouncer as fast reload blocker to avoid extension blocking", () => {
-    const emitter = new SignEmitter(mockedServer, "0.0.0.0");
+  it("Should setup signal debounce as fast reload blocker to avoid extension blocking", () => {
+    const emitter = new SignEmitter(mockedServer, <Agent>mockedAgent);
 
-    assert(debouncerSpy.calledWith(FAST_RELOAD_DEBOUNCING_FRAME));
+    assert(debounceSpy.calledWith(FAST_RELOAD_DEBOUNCING_FRAME));
     assert(
       fastReloadBlockerSpy.calledWith(FAST_RELOAD_CALLS, FAST_RELOAD_WAIT)
     );
@@ -46,28 +48,17 @@ describe("SignEmitter", () => {
   it(`Should assign new rules if the Chrome/Chromium version is >= ${
     NEW_FAST_RELOAD_CHROME_VERSION
   }`, () => {
-    const emitter = new SignEmitter(
-      mockedServer,
-      NEW_FAST_RELOAD_CHROME_VERSION
-    );
+    const [major, minor, patch] = NEW_FAST_RELOAD_CHROME_VERSION;
+    const emitter = new SignEmitter(mockedServer, <Agent>{
+      family: "Chrome",
+      major: `${major}`,
+      minor: `${minor}`,
+      patch: `${patch}`
+    });
 
-    assert(debouncerSpy.calledWith(NEW_FAST_RELOAD_DEBOUNCING_FRAME));
+    assert(debounceSpy.calledWith(NEW_FAST_RELOAD_DEBOUNCING_FRAME));
     assert(
       fastReloadBlockerSpy.calledWith(NEW_FAST_RELOAD_CALLS, FAST_RELOAD_WAIT)
-    );
-  });
-
-  it("Should fallback into debounce mode and warn user when isn't possible to identify the browser version", () => {
-    const browserVer = "<wrong format>";
-    const emitter = new SignEmitter(mockedServer, browserVer);
-
-    assert(debouncerSpy.calledWith(FAST_RELOAD_DEBOUNCING_FRAME));
-    assert(
-      fastReloadBlockerSpy.calledWith(FAST_RELOAD_CALLS, FAST_RELOAD_WAIT)
-    );
-
-    assert(
-      warnSpy.calledWith(browserVerWrongFormatMsg.get({ version: browserVer }))
     );
   });
 });
