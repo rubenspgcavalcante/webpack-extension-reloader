@@ -10,8 +10,13 @@ export default function middlewareInjector(
   { port, reloadPage }: MiddlewareTemplateParams
 ) {
   const source: Source = middleWareSourceBuilder({ port, reloadPage });
-  const polyfillSource: Source = new SourceMapSource(webExtensionPolyfillCode, 'webextension-polyfill', webExtensionPolyfillMap);
-  const sourceFactory: SourceFactory = (...sources): Source => new ConcatSource(...sources);
+  const polyfillSource: Source = new SourceMapSource(
+    webExtensionPolyfillCode,
+    "webextension-polyfill",
+    webExtensionPolyfillMap
+  );
+  const sourceFactory: SourceFactory = (...sources): Source =>
+    new ConcatSource(...sources);
 
   return (assets: object, chunks: WebpackChunk[]) =>
     chunks.reduce((prev, { name, files }) => {
@@ -22,8 +27,12 @@ export default function middlewareInjector(
       ) {
         files.forEach(entryPoint => {
           if (/\.js$/.test(entryPoint)) {
-            const src = sourceFactory(source, polyfillSource, assets[entryPoint]);
-            prev[entryPoint] = src;
+            const finalSrc = sourceFactory(
+              source,
+              polyfillSource,
+              assets[entryPoint]
+            );
+            prev[entryPoint] = finalSrc;
           }
         });
       }

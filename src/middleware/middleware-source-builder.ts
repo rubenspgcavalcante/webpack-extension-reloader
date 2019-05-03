@@ -13,10 +13,12 @@ export default function middleWareSourceBuilder({
 }: MiddlewareTemplateParams): Source {
   const tmpl = template(rawSource);
 
-  return new RawSource(tmpl({
-    WSHost: `ws://localhost:${port}`,
-    reloadPage: `${reloadPage}`,
-    signals: JSON.stringify(signals),
-    config: JSON.stringify({ RECONNECT_INTERVAL, SOCKET_ERR_CODE_REF })
-  }));
+  return new RawSource(
+    tmpl({
+      WSHost: `ws://localhost:${port}`,
+      reloadPage: `${reloadPage}`,
+      signals: JSON.stringify(signals),
+      config: JSON.stringify({ RECONNECT_INTERVAL, SOCKET_ERR_CODE_REF })
+    })
+  );
 }

@@ -101,15 +101,18 @@ describe("middleware-injector", () => {
         entriesInfo.background.path
       ].source();
       const oldBgSource = assets[entriesInfo.background.path].source();
-      assert.equal(newBgSource, sourceCode + oldBgSource);
+
+      assert.include(newBgSource, oldBgSource);
+      assert.include(newBgSource, sourceCode);
     });
 
-    it("Should inject into the a single contentScript", () => {
+    it("Should inject into a single contentScript", () => {
       const newContentSource = assetsSingleContent[
         entriesInfo.contentScript.path
       ].source();
       const oldContentSource = assets[entriesInfo.contentScript.path].source();
-      assert.equal(newContentSource, sourceCode + oldContentSource);
+      assert.include(newContentSource, oldContentSource);
+      assert.include(newContentSource, sourceCode);
     });
 
     it("Should inject into the multiple contentScripts", () => {
@@ -119,15 +122,20 @@ describe("middleware-injector", () => {
       const oldFirstContentSource = assets[
         entriesInfo.contentScript.path
       ].source();
-      assert.equal(newFirstContentSource, sourceCode + oldFirstContentSource);
+
+      assert.include(newFirstContentSource, oldFirstContentSource);
+      assert.include(newFirstContentSource, sourceCode);
 
       const newSecondContentSource = assetsMultiContent[
         entriesInfo.extraContentScript.path
       ].source();
+
       const oldSecondContentSource = assets[
         entriesInfo.extraContentScript.path
       ].source();
-      assert.equal(newSecondContentSource, sourceCode + oldSecondContentSource);
+
+      assert.include(newSecondContentSource, oldSecondContentSource);
+      assert.include(newSecondContentSource, sourceCode);
     });
   });
 
