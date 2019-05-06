@@ -30,7 +30,7 @@
 
   // ========================== Called only on content scripts ============================== //
   function contentScriptWorker() {
-    runtime.sendMessage({ type: SIGN_CONNECT }, msg => console.info(msg));
+    runtime.sendMessage({ type: SIGN_CONNECT }).then(msg => console.info(msg));
 
     runtime.onMessage.addListener(({ type, payload }: Action) => {
       switch (type) {
@@ -48,17 +48,18 @@
 
   // ======================== Called only on background scripts ============================= //
   function backgroundWorker(socket: WebSocket) {
-    runtime.onMessage.addListener((action: Action, sender, sendResponse) => {
+    runtime.onMessage.addListener((action: Action, sender) => {
       if (action.type === SIGN_CONNECT) {
-        sendResponse(formatter("Connected to Extension Hot Reloader"));
+        return Promise.resolve(formatter("Connected to Extension Hot Reloader"));
       }
+      return true;
     });
 
     socket.addEventListener("message", ({ data }: MessageEvent) => {
       const { type, payload } = JSON.parse(data);
 
       if (type === SIGN_CHANGE) {
-        tabs.query({ status: "complete" }, loadedTabs => {
+        tabs.query({ status: "complete" }).then(loadedTabs => {
           loadedTabs.forEach(
             tab => tab.id && tabs.sendMessage(tab.id, { type: SIGN_RELOAD })
           );
@@ -103,7 +104,7 @@
   runtime.reload
     ? backgroundWorker(new WebSocket(wsHost))
     : contentScriptWorker();
-})(window['msBrowser'] || window['chrome'] || window['browser'], window);
+})(window['browser'], window);
 
 /* ----------------------------------------------- */
 /* End of Webpack Hot Extension Middleware  */

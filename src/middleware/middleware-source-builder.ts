@@ -4,7 +4,7 @@ import rawSource from "raw-loader!./wer-middleware.raw";
 import {
   RECONNECT_INTERVAL,
   SOCKET_ERR_CODE_REF
-} from "../constants/midleware-config.constants";
+} from "../constants/middleware-config.constants";
 import * as signals from "../utils/signals";
 
 export default function middleWareSourceBuilder({
