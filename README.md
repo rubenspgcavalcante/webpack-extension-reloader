@@ -1,11 +1,6 @@
 # Webpack Extension Reloader
 A Webpack plugin to enable hot reloading while developing browser extensions.
 
-# Disclaimer
-Targeting to support all browsers, it uses the `webextension-polyfill` package which follows the [Standard WebExtension API](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions),
-which is based on [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). If you're developing on Chrome (which bases the API on callbacks), it may throw
-exceptions. It's **highly recommended** to use this polyfill for your extensions production builds too.
-
 <div align="center">
   <a href="https://github.com/webpack/webpack">
     <img width="200" height="200" src="https://webpack.js.org/assets/icon-square-big.svg">
@@ -18,6 +13,11 @@ exceptions. It's **highly recommended** to use this polyfill for your extensions
 [![Build Status](https://travis-ci.org/rubenspgcavalcante/webpack-extension-reloader.svg?branch=master)](https://travis-ci.org/rubenspgcavalcante/webpack-extension-reloader)
 [![NPM Downloads](https://img.shields.io/npm/dt/webpack-extension-reloader.svg)](https://www.npmjs.com/package/webpack-extension-reloader)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b93aa8303bfb44a2a621cac57639ca26)](https://www.codacy.com/app/rubenspgcavalcante/webpack-extension-reloader?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=rubenspgcavalcante/webpack-extension-reloader&amp;utm_campaign=Badge_Grade) [![Greenkeeper badge](https://badges.greenkeeper.io/rubenspgcavalcante/webpack-extension-reloader.svg)](https://greenkeeper.io/)
+
+# Disclaimer
+Targeting to support all browsers, it uses the [webextension-polyfill](https://github.com/mozilla/webextension-polyfill) package which follows the [Standard WebExtension API](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions),
+which is based on [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). If you're developing on Chrome (which bases the API on callbacks), it may throw
+exceptions. It's **highly recommended** to use this polyfill for your extensions production builds too.
 
 ## Installing
 
