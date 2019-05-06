@@ -1,6 +1,11 @@
 # Webpack Extension Reloader
 A Webpack plugin to enable hot reloading while developing browser extensions.
 
+# Disclaimer
+Targeting to support all browsers, it uses the `webextension-polyfill` package which follows the [Standard WebExtension API](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions),
+which is based on [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). If you're developing on Chrome (which bases the API on callbacks), it may throw
+exceptions. It's **highly recommended** to use this polyfill for your extensions production builds too.
+
 <div align="center">
   <a href="https://github.com/webpack/webpack">
     <img width="200" height="200" src="https://webpack.js.org/assets/icon-square-big.svg">
@@ -106,7 +111,7 @@ plugins: [
 
 ### CLI
 If you don't want all the plugin setup, you can just use the client that comes with the package.  
-You can use by installing the package globally, or directly using `npx` after installing locally the plugin:
+You can use by installing the package globally, or directly using `npx`:
 
 ```bash
 npx webpack-extension-reloader
@@ -157,8 +162,6 @@ yarn build
  the background or content script. Voila!
 
 **Note:**
-The hot reload requires a browser supporting the [Standard Browser Extension API](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions).  
-
 You must have both background and content scripts for this plugin to work, and they must be specified in separate `entry` chunks
 in your webpack config.
 
