@@ -1,1 +1,13 @@
 src/
+sample/
+specs/
+dist/tests.js
+dist/tests.js.map
+.idea/
+.vscode/
+.babelrc
+.gitignore
+tsconfig.json
+tslint.json
+webpack.config.js
+yarn.lock
