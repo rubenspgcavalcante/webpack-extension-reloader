@@ -17,12 +17,12 @@ A Webpack plugin to enable hot reloading while developing browser extensions.
 ## Installing
 
 npm
-```
+```bash
 npm install webpack-extension-reloader --save-dev
 ```
 
 yarn 
-```
+```bash
 yarn add webpack-extension-reloader --dev
 ```
 

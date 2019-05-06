@@ -1,16 +1,16 @@
 **Type:**
-- [ ] bug
-- [ ] feature
-- [ ] enhancement
-- [ ] question
+  - [ ] bug
+  - [ ] feature
+  - [ ] enhancement
+  - [ ] question
 
 **Environment:**
- - OS:
- - Library Version:
+  - OS:
+  - Library Version:
 
 **I'm going to open a PR:**
-- [ ] yes
-- [ ] no
+  - [ ] yes
+  - [ ] no
 
 **Description:**
 [ Write the issue description here ]
