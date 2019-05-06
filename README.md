@@ -23,12 +23,12 @@ exceptions. It's **highly recommended** to use this polyfill for your extensions
 
 npm
 ```
-npm install webpack-extension-reloader --save-dev
+npm install webpack-extension-reloader@next --save-dev
 ```
 
 yarn 
 ```
-yarn add webpack-extension-reloader --dev
+yarn add webpack-extension-reloader@next --dev
 ```
 
 ## Solution for ...
