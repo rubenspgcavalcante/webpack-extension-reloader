@@ -4,7 +4,7 @@
   "private": false,
   "description": "Watch for changes and force the reload of the browser extension",
   "main": "dist/webpack-extension-reloader.js",
-  "bin": "./dist/wer.js",
+  "bin": "./dist/webpack-extension-reloader-cli.js",
   "types": "typings/webpack-extension-reloader.d.ts",
   "repository": {
     "type": "git",
@@ -76,7 +76,6 @@
     "css-loader": "^2.0.0",
     "husky": "^2.0.0",
     "json-loader": "^0.5.4",
-    "memory-fs": "^0.4.1",
     "mini-css-extract-plugin": "^0.6.0",
     "mocha": "^6.1.1",
     "prettier": "^1.8.2",

@@ -5,13 +5,14 @@ const pack = require("./package.json");
 const { isDevelopment, isProduction, test } = require("./src/utils/env");
 
 const mode = isDevelopment ? "development" : "production";
+const packName = 'webpack-extension-reloader';
 
 module.exports = (env = { analyze: false }) => ({
   mode,
   target: "node",
   entry: test({ tests: "./specs/index.ts" }) || {
-    "webpack-extension-reloader": "./src/index.ts",
-    wer: "./client/index.ts"
+    [packName]: "./src/index.ts",
+    [`${packName}-cli`]: "./client/index.ts"
   },
   devtool: "inline-source-map",
   output: {
@@ -26,10 +27,10 @@ module.exports = (env = { analyze: false }) => ({
       banner: "#!/usr/bin/env node",
       raw: true,
       entryOnly: true,
-      include: "wer"
+      include: `${packName}-cli`
     }),
     new BannerPlugin({
-      banner: '/// <reference path="../typings/[name].d.ts" />',
+      banner: `/// <reference path="../typings/${packName}.d.ts" />`,
       raw: true,
       entryOnly: true,
       include: 'webpack-extension-reloader'

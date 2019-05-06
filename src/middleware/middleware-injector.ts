@@ -28,7 +28,7 @@ export default function middlewareInjector(
         files.forEach(entryPoint => {
           if (/\.js$/.test(entryPoint)) {
             const finalSrc = sourceFactory(
-              polyfillSource,
+              //polyfillSource,
               source,
               assets[entryPoint]
             );
