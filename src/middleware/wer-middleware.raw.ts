@@ -4,7 +4,14 @@
 /*  This will be converted into a lodash templ., any  */
 /*  external argument must be provided using it       */
 /* -------------------------------------------------- */
-(function(browser, window) {
+(function(window) {
+  
+  const injectionContext = {browser: null};
+  (function() {
+    `<%= polyfillSource %>`
+  }).bind(injectionContext)();
+
+  const { browser }: any = injectionContext;
   const signals: any = JSON.parse('<%= signals %>');
   const config: any = JSON.parse('<%= config %>');
 
@@ -104,7 +111,7 @@
   runtime.reload
     ? backgroundWorker(new WebSocket(wsHost))
     : contentScriptWorker();
-})(window['browser'], window);
+})(window);
 
 /* ----------------------------------------------- */
 /* End of Webpack Hot Extension Middleware  */
