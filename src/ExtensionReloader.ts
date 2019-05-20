@@ -52,7 +52,7 @@ export default class ExtensionReloaderImpl extends AbstractPluginReloader
     this._injector = middlewareInjector(entries, { port, reloadPage });
     this._triggerer = changesTriggerer(port, reloadPage);
     this._eventAPI.afterOptimizeChunkAssets((comp, chunks) => {
-      if (!compiler.options.entry || !compiler.options.entry["background"]) {
+      if (!compiler.options.entry || !compiler.options.entry[entries.background]) {
         throw new TypeError(bgScriptRequiredMsg.get());
       }
       comp.assets = {
