@@ -1,0 +1,4 @@
+[submodule "wiki"]
+	path = wiki
+	url = https://github.com/rubenspgcavalcante/webpack-extension-reloader.wiki.git
+	branch = master

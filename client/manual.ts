@@ -1,8 +1,7 @@
 import {
-  DEFAULT_BACKGROUND_ENTRY,
   DEFAULT_CONFIG,
-  DEFAULT_CONTENT_SCRIPT_ENTRY,
-  DEFAULT_PORT
+  DEFAULT_PORT,
+  DEFAULT_MANIFEST
 } from "../src/constants/options.constants";
 
 export default () => `
@@ -21,11 +20,8 @@ Complete API:
   DEFAULT_PORT
 }              | The port to run the server                                        |
 | --content-script   | ${
-  DEFAULT_CONTENT_SCRIPT_ENTRY
-}    | The **entry/entries** name(s) for the content script(s)           |
-| --background       | ${
-  DEFAULT_BACKGROUND_ENTRY
-}        | The **entry** name for the background script                      |
+  DEFAULT_MANIFEST
+}    | The **manifest.json** path           |
 | --no-page-reload   |                   | Disable the auto reloading of all **pages** which runs the plugin |
 +------------------------------------------------------------------------------------------------------------+
 `;

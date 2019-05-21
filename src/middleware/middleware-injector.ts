@@ -1,6 +1,5 @@
 import { ConcatSource } from "webpack-sources";
 import middleWareSourceBuilder from "./middleware-source-builder";
-import { EntriesOption } from "webpack-extension-reloader";
 
 export default function middlewareInjector(
   { background, contentScript }: EntriesOption,
@@ -10,13 +9,14 @@ export default function middlewareInjector(
   const sourceFactory: SourceFactory = (...sources): Source =>
     new ConcatSource(...sources);
 
+  const matchBgOrContent = name =>
+    name === background ||
+    name === contentScript ||
+    (contentScript && contentScript.includes(name));
+
   return (assets: object, chunks: WebpackChunk[]) =>
     chunks.reduce((prev, { name, files }) => {
-      if (
-        name === background ||
-        name === contentScript ||
-        contentScript.includes(name)
-      ) {
+      if (matchBgOrContent(name)) {
         files.forEach(entryPoint => {
           if (/\.js$/.test(entryPoint)) {
             const finalSrc = sourceFactory(source, assets[entryPoint]);

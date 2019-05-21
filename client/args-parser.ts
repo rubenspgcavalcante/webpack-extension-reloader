@@ -1,17 +1,15 @@
 import {
-  BACKGROUND_ENTRY,
   CONFIG,
-  CONTENT_SCRIPT_ENTRY,
   HELP,
   NO_PAGE_RELOAD,
-  PORT
+  PORT,
+  MANIFEST
 } from "./args.constant";
 import { resolve } from "path";
 import {
-  DEFAULT_BACKGROUND_ENTRY,
   DEFAULT_CONFIG,
-  DEFAULT_CONTENT_SCRIPT_ENTRY,
-  DEFAULT_PORT
+  DEFAULT_PORT,
+  DEFAULT_MANIFEST
 } from "../src/constants/options.constants";
 import { cwd } from "process";
 import manual from "./manual";
@@ -27,16 +25,12 @@ export default (args: object) => {
 
   const config = args[CONFIG] || DEFAULT_CONFIG;
   const port = args[PORT] || DEFAULT_PORT;
-  const contentArg = args[CONTENT_SCRIPT_ENTRY] || DEFAULT_CONTENT_SCRIPT_ENTRY;
-  const contentScript = contentArg.includes(",")
-    ? contentArg.split(",")
-    : contentArg;
-
-  const background = args[BACKGROUND_ENTRY] || DEFAULT_BACKGROUND_ENTRY;
+  const manifest = args[MANIFEST] || resolve(__dirname, DEFAULT_MANIFEST);
+  
   const pluginOptions: PluginOptions = {
     port,
     reloadPage: !args[NO_PAGE_RELOAD],
-    entries: { contentScript, background }
+    manifest
   };
 
   const optPath = resolve(cwd(), config);

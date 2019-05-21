@@ -4,7 +4,6 @@ import { stub } from "sinon";
 
 import middlewareInjector from "../src/middleware/middleware-injector";
 import * as middlewareSourceBuilder from "../src/middleware/middleware-source-builder";
-import { EntriesOption } from "webpack-extension-reloader";
 
 describe("middleware-injector", () => {
   let assetsBuilder, singleContentChunks, multipleContentsChunks;
@@ -68,6 +67,8 @@ describe("middleware-injector", () => {
       { name: "someOtherAsset", files: [fakeImgPath] }
     ];
 
+    const [firstContent, secondContent] = <string[]>options2.contentScript;
+
     multipleContentsChunks = [
       { name: options2.background, files: [entriesInfo.background.path] },
       {
@@ -75,11 +76,11 @@ describe("middleware-injector", () => {
         files: [entriesInfo.contentScript.path, fakeCssPath]
       },
       {
-        name: options2.contentScript[0],
+        name: firstContent,
         files: [entriesInfo.contentScript.path, fakeCssPath]
       },
       {
-        name: options2.contentScript[1],
+        name: secondContent,
         files: [entriesInfo.extraContentScript.path]
       },
       { name: "someOtherAsset", files: [fakeImgPath] }

@@ -1,23 +1,26 @@
-import { merge } from "lodash";
+import { merge, flatMapDeep } from "lodash";
 import AbstractPluginReloader from "./webpack/AbstractExtensionReloader";
 import { middlewareInjector } from "./middleware";
 import { changesTriggerer } from "./hot-reload";
 import defaultOptions from "./utils/default-options";
 import CompilerEventsFacade from "./webpack/CompilerEventsFacade";
 import { onlyOnDevelopmentMsg } from "./messages/warnings";
-import { bgScriptRequiredMsg } from "./messages/errors";
+import { bgScriptEntryRequiredMsg } from "./messages/errors";
 import { warn } from "./utils/logger";
-import { Compiler, version } from "webpack";
+import { Compiler, version, Entry, Output } from "webpack";
+import { parse } from "path";
 
 import {
   ExtensionReloaderInstance,
-  PluginOptions,
-  EntriesOption
+  PluginOptions
 } from "webpack-extension-reloader";
+import { readFileSync } from "fs";
+import { extractEntries } from "./utils/manifest";
 
 export default class ExtensionReloaderImpl extends AbstractPluginReloader
   implements ExtensionReloaderInstance {
   private _opts?: PluginOptions;
+
   constructor(options?: PluginOptions) {
     super();
     this._opts = options;
@@ -46,23 +49,33 @@ export default class ExtensionReloaderImpl extends AbstractPluginReloader
   }
 
   _registerPlugin(compiler: Compiler) {
-    const { reloadPage, port, entries } = merge(defaultOptions, this._opts);
+    const { reloadPage, port, manifest } = merge(defaultOptions, this._opts);
+    const entries: EntriesOption = extractEntries(
+      <Entry>compiler.options.entry,
+      <Output>compiler.options.output,
+      manifest
+    );
+    console.log(entries);
 
     this._eventAPI = new CompilerEventsFacade(compiler);
     this._injector = middlewareInjector(entries, { port, reloadPage });
     this._triggerer = changesTriggerer(port, reloadPage);
     this._eventAPI.afterOptimizeChunkAssets((comp, chunks) => {
+<<<<<<< HEAD
       if (
         !compiler.options.entry ||
         !compiler.options.entry[entries.background]
       ) {
         throw new TypeError(bgScriptRequiredMsg.get());
       }
+=======
+>>>>>>> Partial commit
       comp.assets = {
         ...comp.assets,
         ...this._injector(comp.assets, chunks)
       };
     });
+
     this._eventAPI.afterEmit((comp, done) => {
       if (this._contentOrBgChanged(comp.chunks, entries)) {
         this._triggerer()
