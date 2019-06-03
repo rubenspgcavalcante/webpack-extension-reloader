@@ -4,7 +4,7 @@
   "version": "0.1",
   "background": {
     "scripts": [
-      "background-script.bundle.js"
+      "background.bundle.js"
     ]
   },
   "icons": {
