@@ -6,6 +6,7 @@
 
 **Environment:**
   - OS:
+  - Browser:
   - Library Version:
 
 **I'm going to open a PR:**

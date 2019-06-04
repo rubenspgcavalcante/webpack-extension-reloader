@@ -4,7 +4,7 @@
   "version": "0.1",
   "background": {
     "scripts": [
-      "background.js"
+      "background.bundle.js"
     ]
   },
   "icons": {
@@ -21,7 +21,7 @@
         "<all_urls>"
       ],
       "js": [
-        "content-script.js"
+        "content-script.bundle.js"
       ],
       "css": [
         "style.css"

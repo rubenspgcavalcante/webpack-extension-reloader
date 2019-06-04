@@ -1,7 +1,7 @@
 const { resolve } = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const WebpackReloaderPlugin = require("../dist/webpack-extension-reloader");
+const ExtensionReloaderPlugin = require("../dist/webpack-extension-reloader");
 
 const mode = process.env.NODE_ENV;
 module.exports = {
@@ -17,14 +17,23 @@ module.exports = {
   output: {
     publicPath: ".",
     path: resolve(__dirname, "dist/"),
-    filename: "[name].js",
+    filename: "[name].bundle.js",
     libraryTarget: "umd"
   },
   plugins: [
     /***********************************************************************/
     /* By default the plugin will work only when NODE_ENV is "development" */
     /***********************************************************************/
-    new WebpackReloaderPlugin(),
+    new ExtensionReloaderPlugin({
+      /*
+      // Also possible to use
+      entries: { 
+        contentScript: 'content-script', 
+        background: 'background' 
+      }
+      */
+      manifest: resolve(__dirname, "manifest.json")
+    }),
 
     new MiniCssExtractPlugin({ filename: "style.css" }),
     new CopyWebpackPlugin([

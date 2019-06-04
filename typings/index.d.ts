@@ -6,6 +6,13 @@ declare type MiddlewareTemplateParams = { port: number; reloadPage: boolean };
 
 declare type VersionPair = [number | undefined, number | undefined];
 
+declare type EntriesOption = {
+  background: string;
+  contentScript: ContentScriptOption;
+};
+
+declare type ContentScriptOption = string | string[] | null;
+
 declare type LOG_NONE = 0;
 declare type LOG_LOG = 1;
 declare type LOG_INFO = 2;
@@ -37,13 +44,36 @@ declare interface Source {
   updateHash(hash: string): void;
 }
 
-declare type SourceFactory = (...sources: (string|Source)[]) => Source;
+declare type SourceFactory = (...sources: (string | Source)[]) => Source;
 
-declare type WebpackChunk = { files: Array<string>; name: string, hash: string };
+declare type WebpackChunk = {
+  files: string[];
+  name: string;
+  hash: string;
+};
 
 declare type ClientEvent = { type: string; payload: any };
 
 declare type BrowserVersion = [number, number, number];
+
+declare type ExtensionManifest = {
+  background?: {
+    scripts: string[];
+  };
+  icons?: {
+    [key: string]: string;
+  };
+  browser_action?: {
+    default_popup: string;
+  };
+  content_scripts?: [
+    {
+      matches: string[];
+      js: string[];
+      css: string[];
+    }
+  ];
+};
 
 declare module "*.json" {
   const json: any;
