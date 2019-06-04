@@ -37,3 +37,30 @@ Now the messages are showing. Closes #41
 ## Following the guideline
 Please follow the above rules, so the repo can stay consistent and easy for everyone find questions and
 already resolved stuff. Be aware that your PR can be denied if you don't follow then :cry:
+
+# Running this project locally
+
+## Building and Testing
+Inside this repository have an example plugin, so you can test and see it working
+After cloning the repository, run:  
+```
+yarn build
+```
+
+ And then run:  
+ ```
+ yarn start:sample
+ ```
+ 
+ This will make the webpack run in watch mode for the sample plugin source and output the built files on the "dist"
+ directory.
+ Load the extension **(the files in "sample/dist" directory)** using the "load unpacked extension", open a 
+ new tab in any site and open the developer panel on it. Watch the dev. tools console tab, and do some changes on 
+ the background or content script. Voila!
+
+**Note:**
+You must have both background and content scripts for this plugin to work, and they must be specified in separate `entry` chunks
+in your webpack config.
+
+The reloading script will be injected only on the main entries chunks (in background and content script). Any other
+chunks will be ignored.

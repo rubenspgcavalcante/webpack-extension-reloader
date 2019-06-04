@@ -1,15 +1,8 @@
-import {
-  CONFIG,
-  HELP,
-  NO_PAGE_RELOAD,
-  PORT,
-  MANIFEST
-} from "./args.constant";
+import { CONFIG, HELP, NO_PAGE_RELOAD, PORT, MANIFEST } from "./args.constant";
 import { resolve } from "path";
 import {
   DEFAULT_CONFIG,
-  DEFAULT_PORT,
-  DEFAULT_MANIFEST
+  DEFAULT_PORT
 } from "../src/constants/options.constants";
 import { cwd } from "process";
 import manual from "./manual";
@@ -25,8 +18,8 @@ export default (args: object) => {
 
   const config = args[CONFIG] || DEFAULT_CONFIG;
   const port = args[PORT] || DEFAULT_PORT;
-  const manifest = args[MANIFEST] || resolve(__dirname, DEFAULT_MANIFEST);
-  
+  const manifest = args[MANIFEST] || null;
+
   const pluginOptions: PluginOptions = {
     port,
     reloadPage: !args[NO_PAGE_RELOAD],

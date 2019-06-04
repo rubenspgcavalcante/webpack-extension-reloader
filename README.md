@@ -50,7 +50,16 @@ plugins: [
 ]
 ```
 
-You can also set some options (the following are the default ones):
+You can point to your `manifest.json file`...
+```js
+  plugins: [
+      new ExtensionReloader({
+        manifest: path.resolve(__dirname, "manifest.json")
+      })
+  ]
+```
+
+... or you can also use some extra options (the following are the default ones):
 ```js
 // webpack.dev.js
 module.exports = {
@@ -66,20 +75,21 @@ module.exports = {
         port: 9090, // Which port use to create the server
         reloadPage: true, // Force the reload of the page also
         entries: { // The entries used for the content/background scripts
-          contentScript: 'content-script', // Use the entry names, not the file name or the path
-          background: 'background' // *REQUIRED
+          contentScript: 'content-script', 
+          background: 'background' 
         }
       })
   ]
-}
+}ß
 ```
+**Note I**: `entry` or `manifest` are needed. If both are given, entry will override the information comming from `manifest.json`. If none are given the default `entry` values (see above) are used.
 
 And then just run your application with Webpack in watch mode:
 ```bash
 NODE_ENV=development webpack --config myconfig.js --mode=development --watch 
 ```
 
-**Important**: You need to set `--mode=development` to activate the plugin (only if you didn't set on the webpack.config.js already) then you need to run with `--watch`, as the plugin will be able to sign the extension only if webpack triggers the rebuild (again, only if you didn't set on webpack.config).
+**Note II**: You need to set `--mode=development` to activate the plugin (only if you didn't set on the webpack.config.js already) then you need to run with `--watch`, as the plugin will be able to sign the extension only if webpack triggers the rebuild (again, only if you didn't set on webpack.config).
 
 ### Multiple Content Script support
 If you use more than one content script in your extension, like:
@@ -128,6 +138,7 @@ npx webpack-extension-reloader --content-script my-first-content.js,my-second-co
 | --help           |                   | Shows this help                                                   |
 | --config         | webpack.config.js | The webpack configuration file path                               |
 | --port           | 9090              | The port to run the server                                        |
+| --manifest       |                   | The path to the extension **manifest.json** file                  |
 | --content-script | content-script    | The **entry/entries** name(s) for the content script(s)           |
 | --background     | background        | The **entry** name for the background script                      |
 | --no-page-reload |                   | Disable the auto reloading of all **pages** which runs the plugin |
@@ -137,31 +148,6 @@ Every time webpack triggers a compilation, the extension reloader are going to d
 
 ### Contributing
 Please before opening any **issue** or **pull request** check the [contribution guide](/.github/CONTRIBUTING.MD).
-
-### Building and Testing
-Inside this repository have an example plugin, so you can test and see it working
-After cloning the repository, run:  
-```
-yarn build
-```
-
- And then run:  
- ```
- yarn start:sample
- ```
- 
- This will make the webpack run in watch mode for the sample plugin source and output the built files on the "dist"
- directory.
- Load the extension **(the files in "sample/dist" directory)** using the "load unpacked extension", open a 
- new tab in any site and open the developer panel on it. Watch the dev. tools console tab, and do some changes on 
- the background or content script. Voila!
-
-**Note:**
-You must have both background and content scripts for this plugin to work, and they must be specified in separate `entry` chunks
-in your webpack config.
-
-The reloading script will be injected only on the main entries chunks (in background and content script). Any other
-chunks will be ignored.
 
 ### License
 This project is under the [MIT LICENSE](http://opensource.org/licenses/MIT)
