@@ -2,7 +2,7 @@ import { Entry, Output } from "webpack";
 import { readFileSync } from "fs";
 import { flatMapDeep } from "lodash";
 import {
-  bgScriptEntryRequiredMsg,
+  bgScriptEntryErrorMsg,
   bgScriptManifestRequiredMsg
 } from "../messages/errors";
 
@@ -28,14 +28,14 @@ export function extractEntries(
   const bgScriptFileNames = background.scripts;
   const toRemove = filename.replace("[name]", "");
 
-  const bgEntry = Object.keys(webpackEntry).find(entryName =>
+  const bgWebpackEntry = Object.keys(webpackEntry).find(entryName =>
     bgScriptFileNames.some(
       bgManifest => bgManifest.replace(toRemove, "") === entryName
     )
   );
 
-  if (!bgEntry) {
-    throw new TypeError(bgScriptEntryRequiredMsg.get());
+  if (!bgWebpackEntry) {
+    throw new TypeError(bgScriptEntryErrorMsg.get());
   }
 
   const contentEntries: unknown = content_scripts
@@ -47,5 +47,8 @@ export function extractEntries(
         )
       )
     : null;
-  return { background: bgEntry, contentScript: <string[]>contentEntries };
+  return {
+    background: bgWebpackEntry,
+    contentScript: <string[]>contentEntries
+  };
 }

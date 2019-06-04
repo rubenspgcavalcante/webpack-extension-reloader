@@ -1,10 +1,10 @@
 import Message from "./Message";
 import { ERROR } from "../constants/log.constants";
 
-export const bgScriptEntryRequiredMsg = new Message(
+export const bgScriptEntryErrorMsg = new Message(
   ERROR,
   1,
-  "Background script entry is required on webpack"
+  "Background script webpack entry not found/match the provided on 'manifest.json' or 'entry.background' option of the plugin"
 );
 
 export const bgScriptManifestRequiredMsg = new Message(
