@@ -25,6 +25,13 @@ module.exports = {
     /* By default the plugin will work only when NODE_ENV is "development" */
     /***********************************************************************/
     new ExtensionReloaderPlugin({
+      /*
+      // Also possible to use
+      entries: { 
+        contentScript: 'content-script', 
+        background: 'background' 
+      }
+      */
       manifest: resolve(__dirname, "manifest.json")
     }),
 
