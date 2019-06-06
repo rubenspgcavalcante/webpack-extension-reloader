@@ -42,7 +42,8 @@ export default class ExtensionReloaderImpl extends AbstractPluginReloader
         this._chunkVersions[name] = hash;
         return hash !== oldVersion;
       })
-      .some(({ name }) => name === background || name === contentScript);
+	  .some(({ name }) => name === background || name === contentScript ||
+	  contentScript.includes(name));
   }
 
   _registerPlugin(compiler: Compiler) {
