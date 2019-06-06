@@ -34,6 +34,8 @@ Well, now you can do hot reloading!
 
 ![](.github/sample-gif.gif)
 
+**Note**: This plugin doesn't allow [**Hot Module Replacement (HMR)**](https://webpack.js.org/concepts/hot-module-replacement/) yet.
+
 ## What it does?
 Basically something similar to what the webpack hot reload middleware does. When you change the code and the webpack
 trigger and finish the compilation, your extension is notified and then reloaded using the [standard browser runtime API](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions).  
