@@ -74,7 +74,7 @@
     "chai": "^4.0.2",
     "copy-webpack-plugin": "^5.0.0",
     "css-loader": "^3.0.0",
-    "husky": "^2.0.0",
+    "husky": "^3.0.0",
     "json-loader": "^0.5.4",
     "mini-css-extract-plugin": "^0.7.0",
     "mocha": "^6.1.1",
