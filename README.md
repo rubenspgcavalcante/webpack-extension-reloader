@@ -1,5 +1,5 @@
 # Webpack Extension Reloader
-A Webpack plugin to enable hot reloading while developing browser extensions.
+A Webpack plugin to automatically reload browser extensions during development.
 
 <div align="center">
   <a href="https://github.com/webpack/webpack">
@@ -30,7 +30,7 @@ yarn add webpack-extension-reloader --dev
 Have your ever being annoyed while developing a browser extension, and being unable to use
 webpack-hot-server because it's not a web app but a browser extension?
 
-Well, now you can do hot reloading!
+Well, now you can have automatic reloading!
 
 ![](.github/sample-gif.gif)
 
@@ -145,7 +145,7 @@ npx webpack-extension-reloader --content-script my-first-content.js,my-second-co
 | --background     | background        | The **entry** name for the background script                      |
 | --no-page-reload |                   | Disable the auto reloading of all **pages** which runs the plugin |
 
-Every time webpack triggers a compilation, the extension reloader are going to do the hot reload :)  
+Every time content or background scripts are modified, the extension is reloaded :)  
 **Note:** the plugin only works on **development** mode, so don't forget to set the NODE_ENV before run the command above
 
 ### Contributing
