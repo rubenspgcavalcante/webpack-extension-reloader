@@ -49,6 +49,7 @@ export function extractEntries(
     : null;
   return {
     background: bgWebpackEntry,
-    contentScript: <string[]>contentEntries
+    contentScript: <string[]>contentEntries,
+    extensionPage: null
   };
 }
