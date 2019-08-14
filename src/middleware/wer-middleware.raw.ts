@@ -26,7 +26,7 @@
   } = signals;
   const { RECONNECT_INTERVAL, SOCKET_ERR_CODE_REF } = config;
 
-  const { runtime, tabs } = browser;
+  const { extension, runtime, tabs } = browser;
   const manifest = runtime.getManifest();
 
   // =============================== Helper functions ======================================= //
@@ -65,7 +65,7 @@
     socket.addEventListener("message", ({ data }: MessageEvent) => {
       const { type, payload } = JSON.parse(data);
 
-      if (type === SIGN_CHANGE) {
+      if (type === SIGN_CHANGE && (!payload || !payload.onlyPageChanged)) {
         tabs.query({ status: "complete" }).then(loadedTabs => {
           loadedTabs.forEach(
             tab => tab.id && tabs.sendMessage(tab.id, { type: SIGN_RELOAD })
@@ -107,9 +107,27 @@
     });
   }
 
+  // ======================== Called only on extension pages that are not the background ============================= //
+  function extensionPageWorker() {
+    runtime.sendMessage({ type: SIGN_CONNECT }).then(msg => console.info(msg));
+
+    runtime.onMessage.addListener(({ type, payload }: Action) => {
+      switch (type) {
+        case SIGN_CHANGE:
+          logger("Detected Changes. Reloading ...");
+          reloadPage && window.location.reload();
+          break;
+
+        case SIGN_LOG:
+          console.info(payload);
+          break;
+      }
+    });
+  }
+
   // ======================= Bootstraps the middleware =========================== //
   runtime.reload
-    ? backgroundWorker(new WebSocket(wsHost))
+    ? extension.getBackgroundPage() === window ? backgroundWorker(new WebSocket(wsHost)) : extensionPageWorker()
     : contentScriptWorker();
 })(window);
 
