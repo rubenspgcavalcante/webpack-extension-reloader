@@ -1,7 +1,5 @@
-/**
- * Neither this file or any dependency (like style.css) should trigger
- * the plugin reload. This way the popup will not close clearing it state
- */
+console.info("Change anything here!");
+
 import "./style.css";
 
 const element = document.createElement("span");
