@@ -11,8 +11,8 @@ export function extractEntries(
   webpackOutput: Output = {},
   manifestPath: string
 ): EntriesOption {
-  const manifestJson = <ExtensionManifest>(
-    JSON.parse(readFileSync(manifestPath).toString())
+  const manifestJson = <ExtensionManifest>JSON.parse(
+    readFileSync(manifestPath).toString()
   );
   const { background, content_scripts } = manifestJson;
 
