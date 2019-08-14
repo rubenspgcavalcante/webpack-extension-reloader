@@ -26,6 +26,14 @@ describe("middleware-injector", () => {
     extraContentScript: {
       name: "extraContentChunkName",
       path: "./path/to/extra-content-script.js"
+    },
+    extensionPage: {
+      name: "pageChunkName",
+      path: "./path/to/popup.js"
+    },
+    extraExtensionPage: {
+      name: "extraPageChunkName",
+      path: "./path/to/options.js"
     }
   };
 
@@ -33,7 +41,8 @@ describe("middleware-injector", () => {
 
   const options: EntriesOption = {
     background: entriesInfo.background.name,
-    contentScript: entriesInfo.contentScript.name
+    contentScript: entriesInfo.contentScript.name,
+    extensionPage: entriesInfo.extensionPage.name
   };
 
   const options2: EntriesOption = {
@@ -41,6 +50,10 @@ describe("middleware-injector", () => {
     contentScript: [
       entriesInfo.contentScript.name,
       entriesInfo.extraContentScript.name
+    ],
+    extensionPage: [
+      entriesInfo.extensionPage.name,
+      entriesInfo.extraExtensionPage.name
     ]
   };
 
@@ -53,6 +66,10 @@ describe("middleware-injector", () => {
     [entriesInfo.extraContentScript.path]: {
       source: () => "const extraCs = true;"
     },
+    [entriesInfo.extensionPage.path]: { source: () => "const ep = true;" },
+    [entriesInfo.extraExtensionPage.path]: {
+      source: () => "const extraEp = true;"
+    },
     [fakeCssPath]: { source: () => "some-css-source" },
     [fakeImgPath]: { source: () => "some-base64-source" }
   };
@@ -64,10 +81,15 @@ describe("middleware-injector", () => {
         name: options.contentScript,
         files: [entriesInfo.contentScript.path, fakeCssPath]
       },
+      {
+        name: options.extensionPage,
+        files: [entriesInfo.extensionPage.path, fakeCssPath]
+      },
       { name: "someOtherAsset", files: [fakeImgPath] }
     ];
 
     const [firstContent, secondContent] = <string[]>options2.contentScript;
+    const [firstPage, secondPage] = <string[]>options2.extensionPage;
 
     multipleContentsChunks = [
       { name: options2.background, files: [entriesInfo.background.path] },
@@ -82,6 +104,18 @@ describe("middleware-injector", () => {
       {
         name: secondContent,
         files: [entriesInfo.extraContentScript.path]
+      },
+      {
+        name: options2.extensionPage,
+        files: [entriesInfo.extensionPage.path, fakeCssPath]
+      },
+      {
+        name: firstPage,
+        files: [entriesInfo.extensionPage.path, fakeCssPath]
+      },
+      {
+        name: secondPage,
+        files: [entriesInfo.extraExtensionPage.path]
       },
       { name: "someOtherAsset", files: [fakeImgPath] }
     ];
@@ -133,6 +167,38 @@ describe("middleware-injector", () => {
 
       const oldSecondContentSource = assets[
         entriesInfo.extraContentScript.path
+      ].source();
+
+      assert.include(newSecondContentSource, oldSecondContentSource);
+      assert.include(newSecondContentSource, sourceCode);
+    });
+
+    it("Should inject into a single extensionPage", () => {
+      const newContentSource = assetsSingleContent[
+        entriesInfo.extensionPage.path
+      ].source();
+      const oldContentSource = assets[entriesInfo.extensionPage.path].source();
+      assert.include(newContentSource, oldContentSource);
+      assert.include(newContentSource, sourceCode);
+    });
+
+    it("Should inject into the multiple extensionPages", () => {
+      const newFirstContentSource = assetsMultiContent[
+        entriesInfo.extensionPage.path
+      ].source();
+      const oldFirstContentSource = assets[
+        entriesInfo.extensionPage.path
+      ].source();
+
+      assert.include(newFirstContentSource, oldFirstContentSource);
+      assert.include(newFirstContentSource, sourceCode);
+
+      const newSecondContentSource = assetsMultiContent[
+        entriesInfo.extraExtensionPage.path
+      ].source();
+
+      const oldSecondContentSource = assets[
+        entriesInfo.extraExtensionPage.path
       ].source();
 
       assert.include(newSecondContentSource, oldSecondContentSource);
