@@ -42,7 +42,12 @@ export default class SignEmitter {
   }
 
   private _setupSafeSignChange() {
-    return (reloadPage: boolean, onlyPageChanged: boolean, onSuccess: Function, onError: Function) => {
+    return (
+      reloadPage: boolean,
+      onlyPageChanged: boolean,
+      onSuccess: Function,
+      onError: Function
+    ) => {
       try {
         this._sendMsg(signChange({ reloadPage, onlyPageChanged }));
         onSuccess();
