@@ -1,6 +1,6 @@
 {
   "name": "webpack-extension-reloader",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": false,
   "description": "Watch for changes and force the reload of the browser extension",
   "main": "dist/webpack-extension-reloader.js",
