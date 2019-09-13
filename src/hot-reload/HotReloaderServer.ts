@@ -25,9 +25,9 @@ export default class HotReloaderServer {
     });
   }
 
-  signChange(reloadPage: boolean): Promise<any> {
+  signChange(reloadPage: boolean, onlyPageChanged: boolean): Promise<any> {
     if (this._signEmitter) {
-      return this._signEmitter.safeSignChange(reloadPage);
+      return this._signEmitter.safeSignChange(reloadPage, onlyPageChanged);
     } else return Promise.resolve(null);
   }
 }

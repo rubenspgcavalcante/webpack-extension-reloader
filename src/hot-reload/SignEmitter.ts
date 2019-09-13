@@ -35,16 +35,21 @@ export default class SignEmitter {
     }
   }
 
-  safeSignChange(reloadPage: boolean): Promise<any> {
+  safeSignChange(reloadPage: boolean, onlyPageChanged: boolean): Promise<any> {
     return new Promise((res, rej) => {
-      this._safeSignChange(reloadPage, res, rej);
+      this._safeSignChange(reloadPage, onlyPageChanged, res, rej);
     });
   }
 
   private _setupSafeSignChange() {
-    return (reloadPage: boolean, onSuccess: Function, onError: Function) => {
+    return (
+      reloadPage: boolean,
+      onlyPageChanged: boolean,
+      onSuccess: Function,
+      onError: Function
+    ) => {
       try {
-        this._sendMsg(signChange({ reloadPage }));
+        this._sendMsg(signChange({ reloadPage, onlyPageChanged }));
         onSuccess();
       } catch (err) {
         onError(err);

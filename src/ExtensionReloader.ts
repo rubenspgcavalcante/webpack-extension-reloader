@@ -32,28 +32,44 @@ export default class ExtensionReloaderImpl extends AbstractPluginReloader
     return false;
   }
 
-  _contentOrBgChanged(
+  _whatChanged(
     chunks: WebpackChunk[],
-    { background, contentScript }: EntriesOption
+    { background, contentScript, extensionPage }: EntriesOption
   ) {
-    return chunks
-      .filter(({ name, hash }) => {
-        const oldVersion = this._chunkVersions[name];
-        this._chunkVersions[name] = hash;
-        return hash !== oldVersion;
-      })
-      .some(({ name }) => {
-        let contentChanged = false;
-        const bgChanged = name === background;
+    const changedChunks = chunks.filter(({ name, hash }) => {
+      const oldVersion = this._chunkVersions[name];
+      this._chunkVersions[name] = hash;
+      return hash !== oldVersion;
+    });
 
-        if (Array.isArray(contentScript)) {
-          contentChanged = contentScript.some(script => script === name);
+    const contentOrBgChanged = changedChunks.some(({ name }) => {
+      let contentChanged = false;
+      const bgChanged = name === background;
+
+      if (Array.isArray(contentScript)) {
+        contentChanged = contentScript.some(script => script === name);
+      } else {
+        contentChanged = name === contentScript;
+      }
+
+      return contentChanged || bgChanged;
+    });
+
+    const onlyPageChanged =
+      !contentOrBgChanged &&
+      changedChunks.some(({ name }) => {
+        let pageChanged = false;
+
+        if (Array.isArray(extensionPage)) {
+          pageChanged = extensionPage.some(script => script === name);
         } else {
-          contentChanged = name === contentScript;
+          pageChanged = name === extensionPage;
         }
 
-        return contentChanged || bgChanged;
+        return pageChanged;
       });
+
+    return { contentOrBgChanged, onlyPageChanged };
   }
 
   _registerPlugin(compiler: Compiler) {
@@ -81,8 +97,13 @@ export default class ExtensionReloaderImpl extends AbstractPluginReloader
     });
 
     this._eventAPI.afterEmit((comp, done) => {
-      if (this._contentOrBgChanged(comp.chunks, parsedEntries)) {
-        this._triggerer()
+      const { contentOrBgChanged, onlyPageChanged } = this._whatChanged(
+        comp.chunks,
+        parsedEntries
+      );
+
+      if (contentOrBgChanged || onlyPageChanged) {
+        this._triggerer(onlyPageChanged)
           .then(done)
           .catch(done);
       }

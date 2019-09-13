@@ -70,15 +70,17 @@ module.exports = {
   entry: {
       'content-script': './my-content-script.js',
       background: './my-background-script.js'
+      popup: 'popup',
   },
   //...
   plugins: [
       new ExtensionReloader({
         port: 9090, // Which port use to create the server
         reloadPage: true, // Force the reload of the page also
-        entries: { // The entries used for the content/background scripts
+        entries: { // The entries used for the content/background scripts or extension pages
           contentScript: 'content-script', 
-          background: 'background' 
+          background: 'background',
+          extensionPage: 'popup',
         }
       })
   ]
@@ -93,24 +95,28 @@ NODE_ENV=development webpack --config myconfig.js --mode=development --watch
 
 **Note II**: You need to set `--mode=development` to activate the plugin (only if you didn't set on the webpack.config.js already) then you need to run with `--watch`, as the plugin will be able to sign the extension only if webpack triggers the rebuild (again, only if you didn't set on webpack.config).
 
-### Multiple Content Script support
-If you use more than one content script in your extension, like:
+### Multiple Content Script and Extension Page support
+If you use more than one content script or extension page in your extension, like:
 ```js
 entry: {
     'my-first-content-script': './my-first-content-script.js',
     'my-second-content-script': './my-second-content-script.js',
     // and so on ...
-    background: './my-background-script.js'
+    background: './my-background-script.js',
+    'popup': './popup.js',
+    'options': './options.js',
+    // and so on ...
 }
 ```
 
-You can use the `entries.contentScript` options as an array:
+You can use the `entries.contentScript` or `entries.extensionPage` options as an array:
 ```js
 plugins: [
     new ExtensionReloader({
       entries: { 
         contentScript: ['my-first-content-script', 'my-second-content-script', /* and so on ... */],
-        background: 'background'
+        background: 'background',
+        extensionPage: ['popup', 'options', /* and so on ... */],
       }
     })
 ]
@@ -126,11 +132,11 @@ npx webpack-extension-reloader
 If you run directly, it will use the  default configurations, but if you want to customize
 you can call it with the following options:
 ```bash
-npx webpack-extension-reloader --config wb.config.js --port 9080 --no-page-reload --content-script my-content.js --background bg.js 
+npx webpack-extension-reloader --config wb.config.js --port 9080 --no-page-reload --content-script my-content.js --background bg.js --extension-page popup.js
 ```
-If you have **multiple** content scripts, just use comma (with no spaces) while passing the option
+If you have **multiple** content scripts or extension pages, just use comma (with no spaces) while passing the option
 ```bash
-npx webpack-extension-reloader --content-script my-first-content.js,my-second-content.js,my-third-content.js 
+npx webpack-extension-reloader --content-script my-first-content.js,my-second-content.js,my-third-content.js --extension-page popup.js,options.js
 ```
 
 ### Client options
@@ -143,6 +149,7 @@ npx webpack-extension-reloader --content-script my-first-content.js,my-second-co
 | --manifest       |                   | The path to the extension **manifest.json** file                  |
 | --content-script | content-script    | The **entry/entries** name(s) for the content script(s)           |
 | --background     | background        | The **entry** name for the background script                      |
+| --extension-page | popup             | The **entry/entries** name(s) for the extension pages(s)          |
 | --no-page-reload |                   | Disable the auto reloading of all **pages** which runs the plugin |
 
 Every time content or background scripts are modified, the extension is reloaded :)  

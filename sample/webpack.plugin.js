@@ -10,8 +10,6 @@ module.exports = {
   entry: {
     "content-script": "./sample/plugin-src/my-content-script.js",
     background: "./sample/plugin-src/my-background.js",
-
-    // This is just the popup script, it shouldn't trigger the plugin reload when is changed
     popup: "./sample/plugin-src/popup.js"
   },
   output: {
@@ -25,14 +23,13 @@ module.exports = {
     /* By default the plugin will work only when NODE_ENV is "development" */
     /***********************************************************************/
     new ExtensionReloaderPlugin({
-      /*
-      // Also possible to use
       entries: { 
         contentScript: 'content-script', 
-        background: 'background' 
+        background: 'background',
+        extensionPage: 'popup'
       }
-      */
-      manifest: resolve(__dirname, "manifest.json")
+      // Also possible to use
+      // manifest: resolve(__dirname, "manifest.json")
     }),
 
     new MiniCssExtractPlugin({ filename: "style.css" }),

@@ -7,7 +7,7 @@ export default (port: number, reloadPage: boolean) => {
   info("[ Starting the Hot Extension Reload Server... ]");
   server.listen();
 
-  return (): Promise<any> => {
-    return server.signChange(reloadPage);
+  return (onlyPageChanged: boolean): Promise<any> => {
+    return server.signChange(reloadPage, onlyPageChanged);
   };
 };

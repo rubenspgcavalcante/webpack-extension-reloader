@@ -9,9 +9,11 @@ declare type VersionPair = [number | undefined, number | undefined];
 declare type EntriesOption = {
   background: string;
   contentScript: ContentScriptOption;
+  extensionPage?: ExtensionPageOption;
 };
 
 declare type ContentScriptOption = string | string[] | null;
+declare type ExtensionPageOption = string | string[] | null;
 
 declare type LOG_NONE = 0;
 declare type LOG_LOG = 1;

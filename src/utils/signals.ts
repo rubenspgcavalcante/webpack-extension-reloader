@@ -4,9 +4,12 @@ export const SIGN_RELOADED: ActionType = "SIGN_RELOADED";
 export const SIGN_LOG: ActionType = "SIGN_LOG";
 export const SIGN_CONNECT: ActionType = "SIGN_CONNECT";
 
-export const signChange: ActionFactory = ({ reloadPage = true }) => ({
+export const signChange: ActionFactory = ({
+  reloadPage = true,
+  onlyPageChanged = false
+}) => ({
   type: SIGN_CHANGE,
-  payload: { reloadPage }
+  payload: { reloadPage, onlyPageChanged }
 });
 export const signReload: ActionFactory = () => ({ type: SIGN_RELOAD });
 export const signReloaded: ActionFactory = (msg: string) => ({
