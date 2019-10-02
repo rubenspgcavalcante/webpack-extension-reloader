@@ -48,17 +48,17 @@ Add `webpack-extension-reloader` to the plugins section of your webpack configur
 const ExtensionReloader  = require('webpack-extension-reloader');
 
 plugins: [
-    new ExtensionReloader()
+  new ExtensionReloader()
 ]
 ```
 
 You can point to your `manifest.json file`...
 ```js
-  plugins: [
-      new ExtensionReloader({
-        manifest: path.resolve(__dirname, "manifest.json")
-      })
-  ]
+plugins: [
+  new ExtensionReloader({
+    manifest: path.resolve(__dirname, "manifest.json")
+  })
+]
 ```
 
 ... or you can also use some extra options (the following are the default ones):
@@ -68,23 +68,23 @@ module.exports = {
   mode: "development", // The plugin is activated only if mode is set to development
   watch: true,
   entry: {
-      'content-script': './my-content-script.js',
-      background: './my-background-script.js'
-      popup: 'popup',
+    'content-script': './my-content-script.js',
+    background: './my-background-script.js',
+    popup: 'popup',
   },
   //...
   plugins: [
-      new ExtensionReloader({
-        port: 9090, // Which port use to create the server
-        reloadPage: true, // Force the reload of the page also
-        entries: { // The entries used for the content/background scripts or extension pages
-          contentScript: 'content-script', 
-          background: 'background',
-          extensionPage: 'popup',
-        }
-      })
+    new ExtensionReloader({
+      port: 9090, // Which port use to create the server
+      reloadPage: true, // Force the reload of the page also
+      entries: { // The entries used for the content/background scripts or extension pages
+        contentScript: 'content-script',
+        background: 'background',
+        extensionPage: 'popup',
+      }
+    })
   ]
-}ß
+}
 ```
 **Note I**: `entry` or `manifest` are needed. If both are given, entry will override the information comming from `manifest.json`. If none are given the default `entry` values (see above) are used.
 
@@ -99,26 +99,26 @@ NODE_ENV=development webpack --config myconfig.js --mode=development --watch
 If you use more than one content script or extension page in your extension, like:
 ```js
 entry: {
-    'my-first-content-script': './my-first-content-script.js',
-    'my-second-content-script': './my-second-content-script.js',
-    // and so on ...
-    background: './my-background-script.js',
-    'popup': './popup.js',
-    'options': './options.js',
-    // and so on ...
+  'my-first-content-script': './my-first-content-script.js',
+  'my-second-content-script': './my-second-content-script.js',
+  // and so on ...
+  background: './my-background-script.js',
+  'popup': './popup.js',
+  'options': './options.js',
+  // and so on ...
 }
 ```
 
 You can use the `entries.contentScript` or `entries.extensionPage` options as an array:
 ```js
 plugins: [
-    new ExtensionReloader({
-      entries: { 
-        contentScript: ['my-first-content-script', 'my-second-content-script', /* and so on ... */],
-        background: 'background',
-        extensionPage: ['popup', 'options', /* and so on ... */],
-      }
-    })
+  new ExtensionReloader({
+    entries: { 
+      contentScript: ['my-first-content-script', 'my-second-content-script', /* and so on ... */],
+      background: 'background',
+      extensionPage: ['popup', 'options', /* and so on ... */],
+    }
+  })
 ]
 ```
 
