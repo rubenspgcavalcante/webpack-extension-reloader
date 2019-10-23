@@ -43,12 +43,17 @@ Check out [Hot reloading extensions using Webpack](https://medium.com/front-end-
 
 ## How to use
 ### Using as a plugin
-Add `webpack-extension-reloader` to the plugins section of your webpack configuration file.
+Add `webpack-extension-reloader` to the plugins section of your webpack configuration file. Note that this plugin don't outputs the manifest (at most read it to gather information).
+For outputing not only the `manifest.json` but other static files too, use `CopyWebpackPlugin`.
 ```js
 const ExtensionReloader  = require('webpack-extension-reloader');
 
 plugins: [
-  new ExtensionReloader()
+  new ExtensionReloader(),
+  new CopyWebpackPlugin([
+      { from: "./src/manifest.json" },
+      { from: "./src/popup.html" },
+    ]),
 ]
 ```
 
@@ -57,7 +62,8 @@ You can point to your `manifest.json file`...
 plugins: [
   new ExtensionReloader({
     manifest: path.resolve(__dirname, "manifest.json")
-  })
+  }),
+  // ...
 ]
 ```
 
@@ -82,7 +88,8 @@ module.exports = {
         background: 'background',
         extensionPage: 'popup',
       }
-    })
+    }),
+    // ...
   ]
 }
 ```
@@ -118,7 +125,8 @@ plugins: [
       background: 'background',
       extensionPage: ['popup', 'options', /* and so on ... */],
     }
-  })
+  }),
+  // ...
 ]
 ```
 
