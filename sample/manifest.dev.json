@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+  "name": "[DEVELOPMENT] Webpack Chrome Extension Reloader Sample",
+  "version": "0.1",
+  "background": {
+    "scripts": [
+      "background.bundle.js"
+    ]
+  },
+  "icons": {
+    "16": "webpack.16.png",
+    "48": "webpack.48.png",
+    "128": "webpack.128.png"
+  },
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content-script.bundle.js"
+      ],
+      "css": [
+        "style.css"
+      ]
+    }
+  ]
+}
