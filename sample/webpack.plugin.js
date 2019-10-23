@@ -23,10 +23,10 @@ module.exports = {
     /* By default the plugin will work only when NODE_ENV is "development" */
     /***********************************************************************/
     new ExtensionReloaderPlugin({
-      entries: { 
-        contentScript: 'content-script', 
-        background: 'background',
-        extensionPage: 'popup'
+      entries: {
+        contentScript: "content-script",
+        background: "background",
+        extensionPage: "popup"
       }
       // Also possible to use
       // manifest: resolve(__dirname, "manifest.json")
@@ -34,8 +34,18 @@ module.exports = {
 
     new MiniCssExtractPlugin({ filename: "style.css" }),
     new CopyWebpackPlugin([
+      {
+        /***********************************************************************/
+        /* If you have different configurations for development and production,*/
+        /* you can have two manifests (one for each environment)               */
+        /***********************************************************************/
+        from:
+          process.env.NODE_ENV === "development"
+            ? "./sample/manifest.dev.json"
+            : "./sample/manifest.prod.json",
+        to: "manifest.json"
+      },
       { from: "./sample/plugin-src/popup.html" },
-      { from: "./sample/manifest.json" },
       { from: "./sample/icons" }
     ])
   ],
