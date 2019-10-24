@@ -1,5 +1,6 @@
-import { ConcatSource } from "webpack-sources";
+import { ConcatSource, Source } from "webpack-sources";
 import middleWareSourceBuilder from "./middleware-source-builder";
+import { SourceFactory } from "../../typings";
 
 export default function middlewareInjector(
   { background, contentScript, extensionPage }: EntriesOption,

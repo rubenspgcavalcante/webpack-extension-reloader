@@ -12,7 +12,7 @@ import { extractEntries } from "./utils/manifest";
 import {
   ExtensionReloaderInstance,
   PluginOptions
-} from "webpack-extension-reloader";
+} from "../typings/webpack-extension-reloader";
 
 export default class ExtensionReloaderImpl extends AbstractPluginReloader
   implements ExtensionReloaderInstance {

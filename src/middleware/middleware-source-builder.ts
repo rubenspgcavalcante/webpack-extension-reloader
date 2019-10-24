@@ -1,5 +1,5 @@
 import { template } from "lodash";
-import { RawSource } from "webpack-sources";
+import { RawSource, Source } from "webpack-sources";
 import rawSource from "raw-loader!./wer-middleware.raw";
 import polyfillSource from "raw-loader!webextension-polyfill";
 

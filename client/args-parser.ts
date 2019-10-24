@@ -7,8 +7,8 @@ import {
 import { cwd } from "process";
 import manual from "./manual";
 import { SIG_EXIT } from "./events.constants";
-import { log, error } from "util";
-import { PluginOptions } from "webpack-extension-reloader";
+import { log } from "util";
+import { PluginOptions } from "../typings/webpack-extension-reloader";
 
 export default (args: object) => {
   if (args[HELP]) {
@@ -33,8 +33,8 @@ export default (args: object) => {
     const webpackConfig = eval("require")(optPath);
     return { webpackConfig, pluginOptions };
   } catch (err) {
-    error(`[Error] Couldn't require the file: ${optPath}`);
-    error(err);
+    log(`[Error] Couldn't require the file: ${optPath}`);
+    log(err);
     throw { type: SIG_EXIT, payload: 1 };
   }
 };

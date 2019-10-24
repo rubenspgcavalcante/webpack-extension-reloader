@@ -2,7 +2,7 @@ import { assert } from "chai";
 import { spy, stub, SinonStub } from "sinon";
 import ExtensionReloaderImpl from "../src/ExtensionReloader";
 import * as webpack from "webpack";
-import { ExtensionReloaderInstance } from "webpack-extension-reloader";
+import { ExtensionReloaderInstance } from "../typings/webpack-extension-reloader";
 
 describe("ExtensionReloader", () => {
   const envCopy = { ...process.env };

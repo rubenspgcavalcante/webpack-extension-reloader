@@ -26,7 +26,7 @@ export function extractEntries(
   }
 
   const bgScriptFileNames = background.scripts;
-  const toRemove = filename.replace("[name]", "");
+  const toRemove = (filename as string).replace("[name]", "");
 
   const bgWebpackEntry = Object.keys(webpackEntry).find(entryName =>
     bgScriptFileNames.some(
