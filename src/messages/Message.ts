@@ -28,9 +28,10 @@ export default class Message {
   public get(additionalData: object = {}) {
     const code = `WER-${this.getPrefix()}${this.referenceNumber}`;
     const refLink = bold(white(`${REF_URL}#${code}`));
-    return `[${code}] ${template(this.message, additionalData)}.\nVisit ${
-      refLink
-    } for complete details\n`;
+    return `[${code}] ${template(
+      this.message,
+      additionalData
+    )}.\nVisit ${refLink} for complete details\n`;
   }
 
   toString() {

@@ -13,9 +13,12 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn format",
+      "pre-commit": "lint-staged",
       "pre-push": "yarn test"
     }
+  },
+  "lint-staged": {
+    "*.{ts}": ["yarn format:files", "git add"]
   },
   "scripts": {
     "build": "NODE_ENV=production webpack",
@@ -25,7 +28,8 @@
     "start:sample":
       "NODE_ENV=development webpack --config sample/webpack.plugin.js --watch",
     "prepublish": "yarn build",
-    "format": "prettier --write \"{src,client}/**/*.ts\""
+    "format": "prettier --write \"{src,client}/**/*.ts\"",
+    "format:files": "prettier --write"
   },
   "author": "Rubens Pinheiro Gonçalves Cavalcante",
   "license": "MIT",
@@ -44,8 +48,8 @@
     "hot-reload"
   ],
   "dependencies": {
-    "@types/webpack-sources": "^0.1.5",
     "@types/webpack": "^4.39.5",
+    "@types/webpack-sources": "^0.1.5",
     "colors": "^1.4.0",
     "lodash": "^4.17.15",
     "useragent": "^2.3.0",
@@ -80,6 +84,7 @@
     "css-loader": "^3.2.0",
     "husky": "^3.0.9",
     "json-loader": "^0.5.7",
+    "lint-staged": "^9.4.2",
     "mini-css-extract-plugin": "^0.8.0",
     "mocha": "^6.2.2",
     "prettier": "^1.18.2",
