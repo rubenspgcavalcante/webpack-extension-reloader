@@ -98,11 +98,13 @@
       const intId = setInterval(() => {
         logger("Attempting to reconnect (tip: Check if Webpack is running)");
         const ws = new WebSocket(wsHost);
+        ws.onerror = () => logger(`Error trying to re-connect. Reattempting in ${RECONNECT_INTERVAL/1000}s`, "warn");
         ws.addEventListener("open", () => {
           clearInterval(intId);
           logger("Reconnected. Reloading plugin");
           runtime.reload();
-        });
+        });  
+      
       }, RECONNECT_INTERVAL);
     });
   }

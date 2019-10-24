@@ -9,7 +9,7 @@
     "moduleResolution": "node",
     "allowJs": true,
     "typeRoots": ["typings/index.d.ts"],
-    "types": ["node", "mocha"]
+    "types": ["node", "mocha", "webpack", "webpack-sources"]
   },
   "presets": [
     "env",
@@ -21,7 +21,7 @@
     "typings/index.d.ts",
     "typings/webpack-extension-reloader.d.ts"
   ],
-  "include": ["client/**/*", "src/**/*", "specs/**/*"],
+  "include": ["client/**/*", "src/**/*", "specs/**/*", "typings/*.d.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"],
   "extensions": {
     ".ts": "TS",

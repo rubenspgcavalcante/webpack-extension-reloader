@@ -11,8 +11,8 @@ export function extractEntries(
   webpackOutput: Output = {},
   manifestPath: string
 ): EntriesOption {
-  const manifestJson = <ExtensionManifest>JSON.parse(
-    readFileSync(manifestPath).toString()
+  const manifestJson = <ExtensionManifest>(
+    JSON.parse(readFileSync(manifestPath).toString())
   );
   const { background, content_scripts } = manifestJson;
 
@@ -26,7 +26,7 @@ export function extractEntries(
   }
 
   const bgScriptFileNames = background.scripts;
-  const toRemove = filename.replace("[name]", "");
+  const toRemove = (filename as string).replace("[name]", "");
 
   const bgWebpackEntry = Object.keys(webpackEntry).find(entryName =>
     bgScriptFileNames.some(

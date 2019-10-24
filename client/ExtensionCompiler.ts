@@ -1,9 +1,9 @@
 import * as webpack from "webpack";
 import { Configuration } from "webpack";
 import ExtensionReloaderImpl from "../src/ExtensionReloader";
-import { error } from "util";
+import { log } from "util";
 import { info } from "../src/utils/logger";
-import { PluginOptions } from "webpack-extension-reloader";
+import { PluginOptions } from "../typings/webpack-extension-reloader";
 
 export default class ExtensionCompiler {
   private compiler;
@@ -19,9 +19,9 @@ export default class ExtensionCompiler {
   }
 
   private static treatErrors(err) {
-    error(err.stack || err);
+    log(err.stack || err);
     if (err.details) {
-      error(err.details);
+      log(err.details);
     }
   }
 
