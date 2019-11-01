@@ -21,7 +21,7 @@ export function extractEntries(
     throw new Error();
   }
 
-  if (!background) {
+  if (!background || !background.scripts) {
     throw new TypeError(bgScriptManifestRequiredMsg.get());
   }
 

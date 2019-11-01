@@ -41,8 +41,12 @@ declare type ClientEvent = { type: string; payload: any };
 declare type BrowserVersion = [number, number, number];
 
 declare type ExtensionManifest = {
+  manifest_version: string;
+  name: string;
+  version: string;
   background?: {
-    scripts: string[];
+    page?: string;
+    scripts?: string[];
   };
   icons?: {
     [key: string]: string;
