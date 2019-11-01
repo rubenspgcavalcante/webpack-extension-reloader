@@ -1,9 +1,8 @@
 {
   "name": "webpack-extension-reloader",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "private": false,
-  "description":
-    "Watch for changes and force the reload of the browser extension",
+  "description": "Watch for changes and force the reload of the browser extension",
   "main": "dist/webpack-extension-reloader.js",
   "bin": "./dist/webpack-extension-reloader-cli.js",
   "types": "typings/webpack-extension-reloader.d.ts",
@@ -18,15 +17,17 @@
     }
   },
   "lint-staged": {
-    "*.{ts}": ["yarn format:files", "git add"]
+    "*.{ts}": [
+      "yarn format:files",
+      "git add"
+    ]
   },
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "test": "NODE_ENV=test webpack && mocha dist/tests.js",
     "analyze": "NODE_ENV=production webpack --env.analyze",
     "start:dev": "NODE_ENV=development webpack --watch",
-    "start:sample":
-      "NODE_ENV=development webpack --config sample/webpack.plugin.js --watch",
+    "start:sample": "NODE_ENV=development webpack --config sample/webpack.plugin.js --watch",
     "prepublish": "yarn build",
     "format": "prettier --write \"{src,client}/**/*.ts\"",
     "format:files": "prettier --write"
@@ -34,11 +35,9 @@
   "author": "Rubens Pinheiro Gonçalves Cavalcante",
   "license": "MIT",
   "bugs": {
-    "url":
-      "https://github.com/rubenspgcavalcante/webpack-extension-reloader/issues"
+    "url": "https://github.com/rubenspgcavalcante/webpack-extension-reloader/issues"
   },
-  "homepage":
-    "https://github.com/rubenspgcavalcante/webpack-extension-reloader#readme",
+  "homepage": "https://github.com/rubenspgcavalcante/webpack-extension-reloader#readme",
   "keywords": [
     "webpack",
     "plugin",
