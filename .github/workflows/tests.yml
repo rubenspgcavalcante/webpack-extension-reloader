@@ -1,4 +1,4 @@
-name: Unit Tests
+name: tests
 on: [push]
 jobs:
   build-and-test:
