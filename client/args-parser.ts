@@ -1,14 +1,14 @@
-import { CONFIG, HELP, NO_PAGE_RELOAD, PORT, MANIFEST } from "./args.constant";
 import { resolve } from "path";
+import { cwd } from "process";
+import { log } from "util";
 import {
   DEFAULT_CONFIG,
-  DEFAULT_PORT
+  DEFAULT_PORT,
 } from "../src/constants/options.constants";
-import { cwd } from "process";
-import manual from "./manual";
+import { IPluginOptions } from "../typings/webpack-extension-reloader";
+import { CONFIG, HELP, MANIFEST, NO_PAGE_RELOAD, PORT } from "./args.constant";
 import { SIG_EXIT } from "./events.constants";
-import { log } from "util";
-import { PluginOptions } from "../typings/webpack-extension-reloader";
+import manual from "./manual";
 
 export default (args: object) => {
   if (args[HELP]) {
@@ -20,16 +20,16 @@ export default (args: object) => {
   const port = args[PORT] || DEFAULT_PORT;
   const manifest = args[MANIFEST] || null;
 
-  const pluginOptions: PluginOptions = {
+  const pluginOptions: IPluginOptions = {
+    manifest,
     port,
     reloadPage: !args[NO_PAGE_RELOAD],
-    manifest
   };
 
   const optPath = resolve(cwd(), config);
 
   try {
-    // tslint:disable-next-line:no-eval
+    // tslint:disable-next-line: no-eval
     const webpackConfig = eval("require")(optPath);
     return { webpackConfig, pluginOptions };
   } catch (err) {

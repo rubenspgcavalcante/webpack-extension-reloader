@@ -1,4 +1,5 @@
 {
+  "extends": "tslint:recommended",
   "rules": {
     "no-eval": true,
     "arrow-parens": [true, "ban-single-arg-parens"],
@@ -7,9 +8,6 @@
     "one-line": [true, "check-open-brace", "check-whitespace"],
     "variable-name": [true, "ban-keywords"],
     "triple-equals": [true, "allow-null-check"],
-    "extends": [
-      "tslint:latest",
-      "tslint-config-prettier"
-    ]
+    "extends": ["tslint:latest", "tslint-config-prettier"]
   }
 }

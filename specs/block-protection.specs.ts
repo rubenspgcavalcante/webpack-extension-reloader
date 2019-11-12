@@ -1,9 +1,8 @@
 import { assert } from "chai";
+import _ from "lodash";
 import { useFakeTimers } from "sinon";
 import { FAST_RELOAD_DEBOUNCING_FRAME } from "../src/constants/fast-reloading.constants";
 import { debounceSignal } from "../src/utils/block-protection";
-
-const _ = require("lodash");
 
 describe("debounce signals to prevent extension block", () => {
   let calls;
@@ -21,9 +20,7 @@ describe("debounce signals to prevent extension block", () => {
     clock.restore();
   });
 
-  it(`It should debounce the method call for ${
-    FAST_RELOAD_DEBOUNCING_FRAME
-  } milli`, () => {
+  it(`It should debounce the method call for ${FAST_RELOAD_DEBOUNCING_FRAME} milli`, () => {
     const sample = debounceSignal(FAST_RELOAD_DEBOUNCING_FRAME)(test);
 
     sample();

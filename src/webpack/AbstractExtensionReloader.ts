@@ -1,13 +1,12 @@
-import { Plugin } from "webpack";
+import { Compiler, Plugin } from "webpack";
 import CompilerEventsFacade from "./CompilerEventsFacade";
 
 export default abstract class AbstractExtensionReloader implements Plugin {
-  protected _injector: Function;
-  protected _triggerer: Function;
+  public context: any;
+  protected _injector: InjectMiddleware;
+  protected _triggerer: Triggerer;
   protected _eventAPI: CompilerEventsFacade;
-  protected _chunkVersions: Object;
+  protected _chunkVersions: Record<string, any>;
 
-  context: any;
-
-  abstract apply(options?: any);
+  public abstract apply(compiler: Compiler);
 }

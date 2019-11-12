@@ -8,7 +8,7 @@ export const FAST_RELOAD_DEBOUNCING_FRAME = 2000;
 export const FAST_RELOAD_CALLS = 6;
 export const FAST_RELOAD_WAIT = 10 * 1000;
 
-// ======================================================================================================================== //
+// ================================================================================================================= //
 
 /**
  * A new reloading rate was created after opening a bug ticket on

@@ -1,15 +1,15 @@
 import { install } from "source-map-support";
-import ExtensionReloaderImpl from "./ExtensionReloader";
 import { DEBUG, ERROR, NONE } from "./constants/log.constants";
+import ExtensionReloaderImpl from "./ExtensionReloader";
 import { setLogLevel } from "./utils/logger";
 
 install();
 
 const logLevel = process.env.NODE_ENV
   ? {
-      production: ERROR,
       development: DEBUG,
-      test: NONE
+      production: ERROR,
+      test: NONE,
     }[process.env.NODE_ENV]
   : ERROR;
 
