@@ -6,17 +6,17 @@ export const SIGN_CONNECT: ActionType = "SIGN_CONNECT";
 
 export const signChange: ActionFactory = ({
   reloadPage = true,
-  onlyPageChanged = false
+  onlyPageChanged = false,
 }) => ({
+  payload: { reloadPage, onlyPageChanged },
   type: SIGN_CHANGE,
-  payload: { reloadPage, onlyPageChanged }
 });
 export const signReload: ActionFactory = () => ({ type: SIGN_RELOAD });
 export const signReloaded: ActionFactory = (msg: string) => ({
+  payload: msg,
   type: SIGN_RELOADED,
-  payload: msg
 });
 export const signLog: ActionFactory = (msg: string) => ({
+  payload: msg,
   type: SIGN_LOG,
-  payload: msg
 });

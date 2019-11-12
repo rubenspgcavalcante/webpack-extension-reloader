@@ -1,16 +1,39 @@
 declare type ActionType = string;
-declare type Action = { type: ActionType; payload?: any };
-declare type ActionFactory = (payload?: any) => Action;
+declare interface IAction {
+  type: ActionType;
+  payload?: any;
+}
+declare type ActionFactory = (payload?: any) => IAction;
 
-declare type MiddlewareTemplateParams = { port: number; reloadPage: boolean };
+declare interface IMiddlewareTemplateParams {
+  port: number;
+  reloadPage: boolean;
+}
+
+declare type InjectMiddleware = (
+  assets: Record<string, any>,
+  chunks: IWebpackChunk[],
+) => Record<string, any>;
+
+declare type MiddlewareInjector = (
+  { background, contentScript, extensionPage }: IEntriesOption,
+  { port, reloadPage }: IMiddlewareTemplateParams,
+) => InjectMiddleware;
+
+declare type Triggerer = (onlyPageChanged: boolean) => Promise<any>;
+
+declare type TriggererFactory = (
+  port: number,
+  reloadPage: boolean,
+) => Triggerer;
 
 declare type VersionPair = [number | undefined, number | undefined];
 
-declare type EntriesOption = {
+declare interface IEntriesOption {
   background: string;
   contentScript: ContentScriptOption;
   extensionPage?: ExtensionPageOption;
-};
+}
 
 declare type ContentScriptOption = string | string[] | null;
 declare type ExtensionPageOption = string | string[] | null;
@@ -30,17 +53,20 @@ declare type LOG_LEVEL =
   | LOG_ERROR
   | LOG_DEBUG;
 
-declare type WebpackChunk = {
+declare interface IWebpackChunk {
   files: string[];
   name: string;
   hash: string;
-};
+}
 
-declare type ClientEvent = { type: string; payload: any };
+declare interface IClientEvent {
+  type: string;
+  payload: any;
+}
 
 declare type BrowserVersion = [number, number, number];
 
-declare type ExtensionManifest = {
+declare interface IExtensionManifest {
   manifest_version: string;
   name: string;
   version: string;
@@ -59,6 +85,6 @@ declare type ExtensionManifest = {
       matches: string[];
       js: string[];
       css: string[];
-    }
+    },
   ];
-};
+}

@@ -1,60 +1,62 @@
-import { RawSource } from "webpack-sources";
 import { assert } from "chai";
 import { stub } from "sinon";
+import { RawSource } from "webpack-sources";
 
 import middlewareInjector from "../src/middleware/middleware-injector";
 import * as middlewareSourceBuilder from "../src/middleware/middleware-source-builder";
 
 describe("middleware-injector", () => {
-  let assetsBuilder, singleContentChunks, multipleContentsChunks;
+  let assetsBuilder;
+  let multipleContentsChunks;
+  let singleContentChunks;
   const sourceCode = "console.log('I am a middleware!!!');";
 
   stub(middlewareSourceBuilder, "default").callsFake(
-    opts => new RawSource(sourceCode)
+    opts => new RawSource(sourceCode),
   );
 
   const sourceFactory = stub().callsFake((toConcat: string, file) => ({
-    source: () => toConcat + file.source()
+    source: () => toConcat + file.source(),
   }));
 
   const entriesInfo = {
     background: { name: "bgChunkName", path: "./path/to/bg-script.js" },
     contentScript: {
       name: "contentChunkName",
-      path: "./path/to/content-script.js"
-    },
-    extraContentScript: {
-      name: "extraContentChunkName",
-      path: "./path/to/extra-content-script.js"
+      path: "./path/to/content-script.js",
     },
     extensionPage: {
       name: "pageChunkName",
-      path: "./path/to/popup.js"
+      path: "./path/to/popup.js",
+    },
+    extraContentScript: {
+      name: "extraContentChunkName",
+      path: "./path/to/extra-content-script.js",
     },
     extraExtensionPage: {
       name: "extraPageChunkName",
-      path: "./path/to/options.js"
-    }
+      path: "./path/to/options.js",
+    },
   };
 
   const templateOpts = { port: 1234, reloadPage: true };
 
-  const options: EntriesOption = {
+  const options: IEntriesOption = {
     background: entriesInfo.background.name,
     contentScript: entriesInfo.contentScript.name,
-    extensionPage: entriesInfo.extensionPage.name
+    extensionPage: entriesInfo.extensionPage.name,
   };
 
-  const options2: EntriesOption = {
+  const options2: IEntriesOption = {
     background: entriesInfo.background.name,
     contentScript: [
       entriesInfo.contentScript.name,
-      entriesInfo.extraContentScript.name
+      entriesInfo.extraContentScript.name,
     ],
     extensionPage: [
       entriesInfo.extensionPage.name,
-      entriesInfo.extraExtensionPage.name
-    ]
+      entriesInfo.extraExtensionPage.name,
+    ],
   };
 
   const fakeCssPath = "./path/to/some.css";
@@ -64,65 +66,66 @@ describe("middleware-injector", () => {
     [entriesInfo.background.path]: { source: () => "const bg = true;" },
     [entriesInfo.contentScript.path]: { source: () => "const cs = true;" },
     [entriesInfo.extraContentScript.path]: {
-      source: () => "const extraCs = true;"
+      source: () => "const extraCs = true;",
     },
     [entriesInfo.extensionPage.path]: { source: () => "const ep = true;" },
     [entriesInfo.extraExtensionPage.path]: {
-      source: () => "const extraEp = true;"
+      source: () => "const extraEp = true;",
     },
     [fakeCssPath]: { source: () => "some-css-source" },
-    [fakeImgPath]: { source: () => "some-base64-source" }
+    [fakeImgPath]: { source: () => "some-base64-source" },
   };
 
   beforeEach(() => {
     singleContentChunks = [
       { name: options.background, files: [entriesInfo.background.path] },
       {
+        files: [entriesInfo.contentScript.path, fakeCssPath],
         name: options.contentScript,
-        files: [entriesInfo.contentScript.path, fakeCssPath]
       },
       {
+        files: [entriesInfo.extensionPage.path, fakeCssPath],
         name: options.extensionPage,
-        files: [entriesInfo.extensionPage.path, fakeCssPath]
       },
-      { name: "someOtherAsset", files: [fakeImgPath] }
+      { name: "someOtherAsset", files: [fakeImgPath] },
     ];
 
-    const [firstContent, secondContent] = <string[]>options2.contentScript;
-    const [firstPage, secondPage] = <string[]>options2.extensionPage;
+    const [firstContent, secondContent] = options2.contentScript as string[];
+    const [firstPage, secondPage] = options2.extensionPage as string[];
 
     multipleContentsChunks = [
       { name: options2.background, files: [entriesInfo.background.path] },
       {
+        files: [entriesInfo.contentScript.path, fakeCssPath],
         name: options2.contentScript,
-        files: [entriesInfo.contentScript.path, fakeCssPath]
       },
       {
+        files: [entriesInfo.contentScript.path, fakeCssPath],
         name: firstContent,
-        files: [entriesInfo.contentScript.path, fakeCssPath]
       },
       {
+        files: [entriesInfo.extraContentScript.path],
         name: secondContent,
-        files: [entriesInfo.extraContentScript.path]
       },
       {
+        files: [entriesInfo.extensionPage.path, fakeCssPath],
         name: options2.extensionPage,
-        files: [entriesInfo.extensionPage.path, fakeCssPath]
       },
       {
+        files: [entriesInfo.extensionPage.path, fakeCssPath],
         name: firstPage,
-        files: [entriesInfo.extensionPage.path, fakeCssPath]
       },
       {
+        files: [entriesInfo.extraExtensionPage.path],
         name: secondPage,
-        files: [entriesInfo.extraExtensionPage.path]
       },
-      { name: "someOtherAsset", files: [fakeImgPath] }
+      { name: "someOtherAsset", files: [fakeImgPath] },
     ];
   });
 
   describe("Injecting middleware into background and content script entries", () => {
-    let assetsSingleContent, assetsMultiContent;
+    let assetsSingleContent;
+    let assetsMultiContent;
     beforeEach(() => {
       assetsBuilder = middlewareInjector(options, templateOpts);
       assetsSingleContent = assetsBuilder(assets, singleContentChunks);

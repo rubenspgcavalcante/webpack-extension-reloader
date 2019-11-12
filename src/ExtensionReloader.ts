@@ -1,40 +1,42 @@
 import { merge } from "lodash";
-import AbstractPluginReloader from "./webpack/AbstractExtensionReloader";
-import { middlewareInjector } from "./middleware";
+import { Compiler, Entry, Output, version } from "webpack";
 import { changesTriggerer } from "./hot-reload";
-import defaultOptions from "./utils/default-options";
-import CompilerEventsFacade from "./webpack/CompilerEventsFacade";
 import { onlyOnDevelopmentMsg } from "./messages/warnings";
+import { middlewareInjector } from "./middleware";
+import defaultOptions from "./utils/default-options";
 import { warn } from "./utils/logger";
-import { Compiler, version, Entry, Output } from "webpack";
 import { extractEntries } from "./utils/manifest";
+import AbstractPluginReloader from "./webpack/AbstractExtensionReloader";
+import CompilerEventsFacade from "./webpack/CompilerEventsFacade";
 
 import {
-  ExtensionReloaderInstance,
-  PluginOptions
+  IExtensionReloaderInstance,
+  IPluginOptions,
 } from "../typings/webpack-extension-reloader";
 
 export default class ExtensionReloaderImpl extends AbstractPluginReloader
-  implements ExtensionReloaderInstance {
-  private _opts?: PluginOptions;
+  implements IExtensionReloaderInstance {
+  private _opts?: IPluginOptions;
 
-  constructor(options?: PluginOptions) {
+  constructor(options?: IPluginOptions) {
     super();
     this._opts = options;
     this._chunkVersions = {};
   }
 
-  _isWebpackGToEV4() {
+  public _isWebpackGToEV4() {
     if (version) {
       const [major] = version.split(".");
-      if (parseInt(major) >= 4) return true;
+      if (parseInt(major, 10) >= 4) {
+        return true;
+      }
     }
     return false;
   }
 
-  _whatChanged(
-    chunks: WebpackChunk[],
-    { background, contentScript, extensionPage }: EntriesOption
+  public _whatChanged(
+    chunks: IWebpackChunk[],
+    { background, contentScript, extensionPage }: IEntriesOption,
   ) {
     const changedChunks = chunks.filter(({ name, hash }) => {
       const oldVersion = this._chunkVersions[name];
@@ -72,17 +74,17 @@ export default class ExtensionReloaderImpl extends AbstractPluginReloader
     return { contentOrBgChanged, onlyPageChanged };
   }
 
-  _registerPlugin(compiler: Compiler) {
+  public _registerPlugin(compiler: Compiler) {
     const { reloadPage, port, entries, manifest } = merge(
       defaultOptions,
-      this._opts
+      this._opts,
     );
 
-    const parsedEntries: EntriesOption = manifest
+    const parsedEntries: IEntriesOption = manifest
       ? extractEntries(
-          <Entry>compiler.options.entry,
-          <Output>compiler.options.output,
-          manifest
+          compiler.options.entry as Entry,
+          compiler.options.output as Output,
+          manifest,
         )
       : entries;
 
@@ -92,14 +94,14 @@ export default class ExtensionReloaderImpl extends AbstractPluginReloader
     this._eventAPI.afterOptimizeChunkAssets((comp, chunks) => {
       comp.assets = {
         ...comp.assets,
-        ...this._injector(comp.assets, chunks)
+        ...this._injector(comp.assets, chunks),
       };
     });
 
     this._eventAPI.afterEmit((comp, done) => {
       const { contentOrBgChanged, onlyPageChanged } = this._whatChanged(
         comp.chunks,
-        parsedEntries
+        parsedEntries,
       );
 
       if (contentOrBgChanged || onlyPageChanged) {
@@ -110,7 +112,7 @@ export default class ExtensionReloaderImpl extends AbstractPluginReloader
     });
   }
 
-  apply(compiler: Compiler) {
+  public apply(compiler: Compiler) {
     if (
       (this._isWebpackGToEV4()
         ? compiler.options.mode

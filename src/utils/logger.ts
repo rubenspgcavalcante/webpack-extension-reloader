@@ -1,5 +1,6 @@
-import { DEBUG, ERROR, INFO, LOG, WARN } from "../constants/log.constants";
+// tslint:disable: no-console
 import { green, red, white, yellow } from "colors/safe";
+import { DEBUG, ERROR, INFO, LOG, WARN } from "../constants/log.constants";
 
 let logLevel;
 export const setLogLevel = (level: LOG_LEVEL) => (logLevel = level);

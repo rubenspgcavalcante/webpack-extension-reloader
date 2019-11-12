@@ -1,7 +1,10 @@
-import HotReloaderServer from "./HotReloaderServer";
 import { info } from "../utils/logger";
+import HotReloaderServer from "./HotReloaderServer";
 
-export default (port: number, reloadPage: boolean) => {
+const changesTriggerer: TriggererFactory = (
+  port: number,
+  reloadPage: boolean,
+) => {
   const server = new HotReloaderServer(port);
 
   info("[ Starting the Hot Extension Reload Server... ]");
@@ -11,3 +14,5 @@ export default (port: number, reloadPage: boolean) => {
     return server.signChange(reloadPage, onlyPageChanged);
   };
 };
+
+export default changesTriggerer;

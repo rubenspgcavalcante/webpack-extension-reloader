@@ -1,3 +1,4 @@
+/* tslint:disable */
 /* -------------------------------------------------- */
 /*      Start of Webpack Hot Extension Middleware     */
 /* ================================================== */
@@ -5,24 +6,24 @@
 /*  external argument must be provided using it       */
 /* -------------------------------------------------- */
 (function(window) {
-  
+
   const injectionContext = {browser: null};
   (function() {
-    `<%= polyfillSource %>`
+    `<%= polyfillSource %>`;
   }).bind(injectionContext)();
 
   const { browser }: any = injectionContext;
-  const signals: any = JSON.parse('<%= signals %>');
-  const config: any = JSON.parse('<%= config %>');
+  const signals: any = JSON.parse("<%= signals %>");
+  const config: any = JSON.parse("<%= config %>");
 
-  const reloadPage: boolean = <"true" | "false">"<%= reloadPage %>" === "true";
+  const reloadPage: boolean = ("<%= reloadPage %>" as "true" | "false") === "true";
   const wsHost = "<%= WSHost %>";
   const {
     SIGN_CHANGE,
     SIGN_RELOAD,
     SIGN_RELOADED,
     SIGN_LOG,
-    SIGN_CONNECT
+    SIGN_CONNECT,
   } = signals;
   const { RECONNECT_INTERVAL, SOCKET_ERR_CODE_REF } = config;
 
@@ -39,7 +40,7 @@
   function contentScriptWorker() {
     runtime.sendMessage({ type: SIGN_CONNECT }).then(msg => console.info(msg));
 
-    runtime.onMessage.addListener(({ type, payload }: Action) => {
+    runtime.onMessage.addListener(({ type, payload }: IAction) => {
       switch (type) {
         case SIGN_RELOAD:
           logger("Detected Changes. Reloading ...");
@@ -55,7 +56,7 @@
 
   // ======================== Called only on background scripts ============================= //
   function backgroundWorker(socket: WebSocket) {
-    runtime.onMessage.addListener((action: Action, sender) => {
+    runtime.onMessage.addListener((action: IAction, sender) => {
       if (action.type === SIGN_CONNECT) {
         return Promise.resolve(formatter("Connected to Extension Hot Reloader"));
       }
@@ -68,7 +69,7 @@
       if (type === SIGN_CHANGE && (!payload || !payload.onlyPageChanged)) {
         tabs.query({ status: "complete" }).then(loadedTabs => {
           loadedTabs.forEach(
-            tab => tab.id && tabs.sendMessage(tab.id, { type: SIGN_RELOAD })
+            tab => tab.id && tabs.sendMessage(tab.id, { type: SIGN_RELOAD }),
           );
           socket.send(
             JSON.stringify({
@@ -76,9 +77,9 @@
               payload: formatter(
                 `${timeFormatter(new Date())} - ${
                   manifest.name
-                } successfully reloaded`
-              )
-            })
+                } successfully reloaded`,
+              ),
+            }),
           );
           runtime.reload();
         });
@@ -92,19 +93,19 @@
         `Socket connection closed. Code ${code}. See more in ${
           SOCKET_ERR_CODE_REF
         }`,
-        "warn"
+        "warn",
       );
 
       const intId = setInterval(() => {
         logger("Attempting to reconnect (tip: Check if Webpack is running)");
         const ws = new WebSocket(wsHost);
-        ws.onerror = () => logger(`Error trying to re-connect. Reattempting in ${RECONNECT_INTERVAL/1000}s`, "warn");
+        ws.onerror = () => logger(`Error trying to re-connect. Reattempting in ${RECONNECT_INTERVAL / 1000}s`, "warn");
         ws.addEventListener("open", () => {
           clearInterval(intId);
           logger("Reconnected. Reloading plugin");
           runtime.reload();
-        });  
-      
+        });
+
       }, RECONNECT_INTERVAL);
     });
   }
@@ -113,7 +114,7 @@
   function extensionPageWorker() {
     runtime.sendMessage({ type: SIGN_CONNECT }).then(msg => console.info(msg));
 
-    runtime.onMessage.addListener(({ type, payload }: Action) => {
+    runtime.onMessage.addListener(({ type, payload }: IAction) => {
       switch (type) {
         case SIGN_CHANGE:
           logger("Detected Changes. Reloading ...");

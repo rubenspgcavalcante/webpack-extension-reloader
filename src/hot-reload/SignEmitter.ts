@@ -1,28 +1,33 @@
-import { Server, OPEN } from "ws";
-import { Agent } from "useragent";
 import { zip } from "lodash";
+import { Agent } from "useragent";
+import { OPEN, Server } from "ws";
 
 import {
-  FAST_RELOAD_DEBOUNCING_FRAME,
   FAST_RELOAD_CALLS,
+  FAST_RELOAD_DEBOUNCING_FRAME,
   FAST_RELOAD_WAIT,
+  NEW_FAST_RELOAD_CALLS,
   NEW_FAST_RELOAD_CHROME_VERSION,
   NEW_FAST_RELOAD_DEBOUNCING_FRAME,
-  NEW_FAST_RELOAD_CALLS
 } from "../constants/fast-reloading.constants";
-import { signChange } from "../utils/signals";
 import { debounceSignal, fastReloadBlocker } from "../utils/block-protection";
+import { signChange } from "../utils/signals";
 
 export default class SignEmitter {
-  private _safeSignChange: Function;
+  private _safeSignChange: (
+    reloadPage: boolean,
+    onlyPageChanged: boolean,
+    onSuccess: () => void,
+    onError: (err: Error) => void,
+  ) => void;
   private _server: Server;
 
   constructor(server: Server, { family, major, minor, patch }: Agent) {
     this._server = server;
     if (family === "Chrome") {
       const [reloadCalls, reloadDeboucingFrame] = this._satisfies(
-        [parseInt(major), parseInt(minor), parseInt(patch)],
-        NEW_FAST_RELOAD_CHROME_VERSION
+        [parseInt(major, 10), parseInt(minor, 10), parseInt(patch, 10)],
+        NEW_FAST_RELOAD_CHROME_VERSION,
       )
         ? [NEW_FAST_RELOAD_CALLS, NEW_FAST_RELOAD_DEBOUNCING_FRAME]
         : [FAST_RELOAD_CALLS, FAST_RELOAD_DEBOUNCING_FRAME];
@@ -35,7 +40,10 @@ export default class SignEmitter {
     }
   }
 
-  safeSignChange(reloadPage: boolean, onlyPageChanged: boolean): Promise<any> {
+  public safeSignChange(
+    reloadPage: boolean,
+    onlyPageChanged: boolean,
+  ): Promise<any> {
     return new Promise((res, rej) => {
       this._safeSignChange(reloadPage, onlyPageChanged, res, rej);
     });
@@ -45,8 +53,8 @@ export default class SignEmitter {
     return (
       reloadPage: boolean,
       onlyPageChanged: boolean,
-      onSuccess: Function,
-      onError: Function
+      onSuccess: () => void,
+      onError: (err: Error) => void,
     ) => {
       try {
         this._sendMsg(signChange({ reloadPage, onlyPageChanged }));
@@ -67,12 +75,14 @@ export default class SignEmitter {
 
   private _satisfies(
     browserVersion: BrowserVersion,
-    targetVersion: BrowserVersion
+    targetVersion: BrowserVersion,
   ) {
-    const versionPairs: Array<VersionPair> = zip(browserVersion, targetVersion);
+    const versionPairs: VersionPair[] = zip(browserVersion, targetVersion);
 
-    for (let [version = 0, target = 0] of versionPairs) {
-      if (version !== target) return version > target;
+    for (const [version = 0, target = 0] of versionPairs) {
+      if (version !== target) {
+        return version > target;
+      }
     }
     return true;
   }

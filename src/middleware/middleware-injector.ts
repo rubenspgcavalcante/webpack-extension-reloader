@@ -1,23 +1,23 @@
 import { ConcatSource, Source } from "webpack-sources";
-import middleWareSourceBuilder from "./middleware-source-builder";
 import { SourceFactory } from "../../typings";
+import middleWareSourceBuilder from "./middleware-source-builder";
 
-export default function middlewareInjector(
-  { background, contentScript, extensionPage }: EntriesOption,
-  { port, reloadPage }: MiddlewareTemplateParams
-) {
+const middlewareInjector: MiddlewareInjector = (
+  { background, contentScript, extensionPage },
+  { port, reloadPage },
+) => {
   const source: Source = middleWareSourceBuilder({ port, reloadPage });
   const sourceFactory: SourceFactory = (...sources): Source =>
     new ConcatSource(...sources);
 
-  const matchBgOrContentOrPage = name =>
+  const matchBgOrContentOrPage = (name: string) =>
     name === background ||
     name === contentScript ||
     (contentScript && contentScript.includes(name)) ||
     name === extensionPage ||
     (extensionPage && extensionPage.includes(name));
 
-  return (assets: object, chunks: WebpackChunk[]) =>
+  return (assets, chunks) =>
     chunks.reduce((prev, { name, files }) => {
       if (matchBgOrContentOrPage(name)) {
         files.forEach(entryPoint => {
@@ -29,4 +29,6 @@ export default function middlewareInjector(
       }
       return prev;
     }, {});
-}
+};
+
+export default middlewareInjector;

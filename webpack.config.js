@@ -5,7 +5,7 @@ const pack = require("./package.json");
 const { isDevelopment, isProduction, test } = require("./src/utils/env");
 
 const mode = isDevelopment ? "development" : "production";
-const packName = 'webpack-extension-reloader';
+const packName = "webpack-extension-reloader";
 
 module.exports = (env = { analyze: false }) => ({
   mode,
@@ -24,18 +24,18 @@ module.exports = (env = { analyze: false }) => ({
   plugins: [
     env.analyze && isProduction(new BundleAnalyzerPlugin({ sourceMap: true })),
     new BannerPlugin({
+      banner: `/// <reference path="../typings/${packName}.d.ts" />`,
+      raw: true,
+      entryOnly: true,
+      include: "webpack-extension-reloader"
+    }),
+    new BannerPlugin({
       banner: "#!/usr/bin/env node",
       raw: true,
       entryOnly: true,
       include: `${packName}-cli`
-    }),
-    new BannerPlugin({
-      banner: `/// <reference path="../typings/${packName}.d.ts" />`,
-      raw: true,
-      entryOnly: true,
-      include: 'webpack-extension-reloader'
     })
-  ].filter((plugin) => !!plugin),
+  ].filter(plugin => !!plugin),
   externals: [
     ...Object.keys(pack.dependencies),
     "webpack",
@@ -52,18 +52,6 @@ module.exports = (env = { analyze: false }) => ({
   },
   module: {
     rules: [
-      {
-        test: /\.ts$/,
-        enforce: "pre",
-        use: [
-          {
-            loader: "tslint-loader",
-            options: {
-              configFile: "./tslint.json"
-            }
-          }
-        ]
-      },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,

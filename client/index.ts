@@ -1,9 +1,9 @@
-import { install } from "source-map-support";
 import * as minimist from "minimist";
+import { install } from "source-map-support";
+import { log } from "util";
 import argsParser from "./args-parser";
 import { SIG_EXIT } from "./events.constants";
 import ExtensionCompiler from "./ExtensionCompiler";
-import { log } from "util";
 
 install();
 const { _, ...args } = minimist(process.argv.slice(2));

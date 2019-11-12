@@ -1,5 +1,5 @@
-import { Server } from "ws";
 import { parse } from "useragent";
+import { Server } from "ws";
 import { info } from "../utils/logger";
 import SignEmitter from "./SignEmitter";
 
@@ -11,13 +11,13 @@ export default class HotReloaderServer {
     this._server = new Server({ port });
   }
 
-  listen() {
+  public listen() {
     this._server.on("connection", (ws, msg) => {
       const userAgent = parse(msg.headers["user-agent"]);
       this._signEmitter = new SignEmitter(this._server, userAgent);
 
       ws.on("message", (data: string) =>
-        info(`Message from ${userAgent.family}: ${JSON.parse(data).payload}`)
+        info(`Message from ${userAgent.family}: ${JSON.parse(data).payload}`),
       );
       ws.on("error", () => {
         // NOOP - swallow socket errors due to http://git.io/vbhSN
@@ -25,9 +25,14 @@ export default class HotReloaderServer {
     });
   }
 
-  signChange(reloadPage: boolean, onlyPageChanged: boolean): Promise<any> {
+  public signChange(
+    reloadPage: boolean,
+    onlyPageChanged: boolean,
+  ): Promise<any> {
     if (this._signEmitter) {
       return this._signEmitter.safeSignChange(reloadPage, onlyPageChanged);
-    } else return Promise.resolve(null);
+    } else {
+      return Promise.resolve(null);
+    }
   }
 }

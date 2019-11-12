@@ -1,8 +1,8 @@
 import { debounce, runInContext } from "lodash";
-import { warn, info } from "./logger";
+import { info, warn } from "./logger";
 
-export const debounceSignal = (deboucingFrame: number, context?: Object) => (
-  func: Function
+export const debounceSignal = (deboucingFrame: number, context?: object) => (
+  func: (...args: any[]) => any,
 ) => {
   if (context) {
     runInContext(context);
@@ -14,7 +14,7 @@ export const debounceSignal = (deboucingFrame: number, context?: Object) => (
 };
 
 export const fastReloadBlocker = (maxCalls: number, wait: number, context) => (
-  func: Function
+  func: (...args: any[]) => any,
 ) => {
   let calls = 0;
   let inWait = false;
@@ -28,7 +28,7 @@ export const fastReloadBlocker = (maxCalls: number, wait: number, context) => (
 
       let interval = wait / 1000;
       warn(
-        `Please wait ${interval} secs. for next reload to prevent your extension being blocked`
+        `Please wait ${interval} secs. for next reload to prevent your extension being blocked`,
       );
       const logInterval = setInterval(() => warn(`${--interval} ...`), 1000);
 
