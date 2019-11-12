@@ -29,7 +29,7 @@ export default (args: object) => {
   const optPath = resolve(cwd(), config);
 
   try {
-    // tslint:disable-next-line:no-eval
+    // tslint:disable-next-line: no-eval
     const webpackConfig = eval("require")(optPath);
     return { webpackConfig, pluginOptions };
   } catch (err) {

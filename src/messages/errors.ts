@@ -4,7 +4,9 @@ import Message from "./Message";
 export const bgScriptEntryErrorMsg = new Message(
   ERROR,
   1,
-  "Background script webpack entry not found/match the provided on 'manifest.json' or 'entry.background' option of the plugin",
+  "Background script webpack entry not found/match \
+the provided on 'manifest.json' or 'entry.background' \
+option of the plugin",
 );
 
 export const bgScriptManifestRequiredMsg = new Message(
