@@ -1,6 +1,6 @@
 name: publish
 on:
-  published:
+  deployment:
     brances:
       - master
 jobs:
