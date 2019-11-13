@@ -1,9 +1,8 @@
-name: lint
+name: audit-and-lint
 on: [push]
 jobs:
-  build-and-test:
+  install-dependencies:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v1
       - name: Cache NPM dependencies
@@ -16,5 +15,12 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install dependencies
         run: yarn
-      - name: Lint the source
-        run: yarn lint
+        
+  audit:
+    - name: Package auditory
+    run: yarn audit
+
+  ts-lint:
+    - name: Lint the source
+      run: yarn lint
+      needs: install-dependencies
