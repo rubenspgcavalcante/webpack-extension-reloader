@@ -10,7 +10,7 @@ A Webpack plugin to automatically reload browser extensions during development.
 </div>
   
 [![npm version](https://badge.fury.io/js/webpack-extension-reloader.svg)](https://badge.fury.io/js/webpack-extension-reloader)
-[![Build Status](https://github.com/rubenspgcavalcante/webpack-extension-reloader/workflows/tests/badge.svg)](https://travis-ci.org/rubenspgcavalcante/webpack-extension-reloader)
+[![Test Status](https://github.com/rubenspgcavalcante/webpack-extension-reloader/workflows/tests/badge.svg)](https://github.com/rubenspgcavalcante/webpack-extension-reloader/actions?query=branch%3Amaster)
 [![NPM Downloads](https://img.shields.io/npm/dt/webpack-extension-reloader.svg)](https://www.npmjs.com/package/webpack-extension-reloader)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b93aa8303bfb44a2a621cac57639ca26)](https://www.codacy.com/app/rubenspgcavalcante/webpack-extension-reloader?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=rubenspgcavalcante/webpack-extension-reloader&amp;utm_campaign=Badge_Grade) [![Greenkeeper badge](https://badges.greenkeeper.io/rubenspgcavalcante/webpack-extension-reloader.svg)](https://greenkeeper.io/)
 

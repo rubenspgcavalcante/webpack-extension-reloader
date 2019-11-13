@@ -1,5 +1,8 @@
-name: tests
-on: [push]
+name: publish
+on:
+  deployment:
+    brances:
+      - master
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -15,11 +18,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - name: Install dependencies
-        run: yarn
+      - name: Install
+        run:
+          - yarn
 
-      - name: Build plugin
-        run: yarn build
-
-      - name: Run the tests
-        run: yarn test
+      - name: Publish package
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          CI: true
+        run:
+          - echo "//registry.yarnpkg.com/:_authToken=$NPM_AUTH_TOKEN" >> ~/.npmrc
+          - yarn publish

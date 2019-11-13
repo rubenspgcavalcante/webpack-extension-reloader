@@ -1,7 +1,7 @@
-name: tests
+name: audit-and-lint
 on: [push]
 jobs:
-  build-and-test:
+  install-audit-lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,8 +18,8 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Build plugin
-        run: yarn build
+      - name: Package auditory
+        run: yarn audit
 
-      - name: Run the tests
-        run: yarn test
+      - name: Lint the source
+        run: yarn lint
