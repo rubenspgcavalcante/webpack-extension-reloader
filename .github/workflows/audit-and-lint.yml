@@ -3,6 +3,7 @@ on: [push]
 jobs:
   install-dependencies:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v1
       - name: Cache NPM dependencies
@@ -13,14 +14,12 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
       - name: Install dependencies
         run: yarn
-        
-  audit:
-    - name: Package auditory
-    run: yarn audit
 
-  ts-lint:
-    - name: Lint the source
-      run: yarn lint
-      needs: install-dependencies
+      - name: Package auditory
+        run: yarn audit
+
+      - name: Lint the source
+        run: yarn lint
