@@ -1,7 +1,7 @@
 name: audit-and-lint
 on: [push]
 jobs:
-  install-dependencies:
+  install-audit-lint:
     runs-on: ubuntu-latest
 
     steps:
