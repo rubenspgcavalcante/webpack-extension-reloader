@@ -13,8 +13,8 @@
   }).bind(injectionContext)();
 
   const { browser }: any = injectionContext;
-  const signals: any = JSON.parse("<%= signals %>");
-  const config: any = JSON.parse("<%= config %>");
+  const signals: any = JSON.parse('<%= signals %>');
+  const config: any = JSON.parse('<%= config %>');
 
   const reloadPage: boolean = ("<%= reloadPage %>" as "true" | "false") === "true";
   const wsHost = "<%= WSHost %>";
