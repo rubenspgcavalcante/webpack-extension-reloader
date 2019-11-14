@@ -1,7 +1,9 @@
 name: publish
 on:
-  deployment:
-    brances:
+  release:
+    types:
+      - created
+    branches:
       - master
 jobs:
   build-and-test:
@@ -18,9 +20,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - name: Install
+      - name: Install and build
         run:
           - yarn
+          - yarn build
 
       - name: Publish package
         env:
