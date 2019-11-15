@@ -118,7 +118,9 @@
       switch (type) {
         case SIGN_CHANGE:
           logger("Detected Changes. Reloading ...");
-          reloadPage && window.location.reload();
+          // Always reload extension pages in the foreground when they change.
+          // This option doesn't make sense otherwise
+          window.location.reload();
           break;
 
         case SIGN_LOG:
