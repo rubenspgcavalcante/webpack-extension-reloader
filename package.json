@@ -91,7 +91,7 @@
     "mini-css-extract-plugin": "^0.8.0",
     "mocha": "^6.2.2",
     "prettier": "^1.19.1",
-    "raw-loader": "^3.1.0",
+    "raw-loader": "^4.0.0",
     "sinon": "^7.5.0",
     "source-map-support": "^0.5.16",
     "style-loader": "^1.0.0",
