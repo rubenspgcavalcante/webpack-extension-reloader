@@ -163,6 +163,13 @@ npx webpack-extension-reloader --content-script my-first-content.js,my-second-co
 Every time content or background scripts are modified, the extension is reloaded :)  
 **Note:** the plugin only works on **development** mode, so don't forget to set the NODE_ENV before run the command above
 
+### Tutorials
+
+So far, the clearest and easiest tutorial out there is the one by [Matteo Mazzarolo](https://github.com/mmazzarolo):
+
+[Developing a browser extension with Create React App](https://mmazzarolo.com/blog/2019-10-19-browser-extension-development/)
+
+
 ### Contributing
 Please before opening any **issue** or **pull request** check the [contribution guide](/.github/CONTRIBUTING.MD).
 
