@@ -90,7 +90,6 @@ export default class ExtensionReloaderImpl extends AbstractPluginReloader
 
     this._eventAPI = new CompilerEventsFacade(compiler);
     this._injector = middlewareInjector(parsedEntries, { port, reloadPage });
-    this._triggerer = changesTriggerer(port, reloadPage);
     this._eventAPI.afterOptimizeChunkAssets((comp, chunks) => {
       comp.assets = {
         ...comp.assets,
@@ -99,6 +98,11 @@ export default class ExtensionReloaderImpl extends AbstractPluginReloader
     });
 
     this._eventAPI.afterEmit((comp, done) => {
+      // start server after first emit, so that a reconnecting extension reloads on files have been created
+      if (!this._triggerer) {
+        this._triggerer = changesTriggerer(port, reloadPage);
+      }
+
       const { contentOrBgChanged, onlyPageChanged } = this._whatChanged(
         comp.chunks,
         parsedEntries,
