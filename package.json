@@ -51,7 +51,7 @@
   ],
   "dependencies": {
     "@types/webpack": "^4.41.0",
-    "@types/webpack-sources": "^0.1.5",
+    "@types/webpack-sources": "^0.1.7",
     "colors": "^1.4.0",
     "lodash": "^4.17.15",
     "minimist": "^1.2.0",
