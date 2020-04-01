@@ -3,16 +3,47 @@
 I this directory you can see a example of plugin project using Webpack and the webpack-extension-reloader.
 
 # How it works
-First run `yarn sample` on the root of this project, this will trigger the webpack using the config within `webpack.plugin.js`.
-For instance:  
-On Chrome extensions, switch to "development mode" and add a "unpacked" extension. The choose the **dist** directory.
-Open a new tab on any site (can't be the home page), open the debugger and you're going to see some *log* from the content-script of the plugin plus a message from the extension hot reload server:
+
+## Build the WER plugin files
+
+```sh
+$ yarn build
+```
+
+This will create the `/dist` folder containing the plugin files built into a bundle.
+
+## Run the WER server
+
+```sh
+$ yarn start:sample
+```
+
+This will create the `sample/dist` folder with the initial files. Since the `start:sample` command starts Webpack with `--watch` option, any further change will be detected automatically and emitted to the `sample/dist` folder. Also, it loads the `webpack.plugin.js` config.
+
+## Load the extension for the first time in your browser
+
+### Google Chrome
+
+1. Access `chrome://extensions`
+2. Enable `Developer mode` at the top-right corner
+3. Click on `Load unpacked` at the top-left corner
+4. Select the `sample/dist` folder
+
+> Make sure you load the `sample/dist` folder and **not** the `sample/plugin-src` one, as your extension must load the transpiled files.
+
+Open your preferred webpage (can't be the Homepage), then open your DevTools Console, and you should be able to see some logs being printed there (from both `my-content-script` and `my-background` files) plus a message from the Hot Reload Server:
+
 ```
 [ WER: Connected to Extension Hot Reloader ]
 ```
-Change anything inside `plugin-src` and look the page reload it automatically, using the new version of your extension.  
-Tip: try to change the content of the console log within the `my-content-script`, and see the page reload and show the new result.
-Tip: try to change the content of the console log within the `popup`, and see the popup reload and show the new result without reloading the entire extension.
+
+## Make any change and see it being applied automatically
+
+Change anything inside `sample/plugin-src` and see the page reload your extension automatically.
+
+> Tip: try to change the content of the console log within the `my-content-script`, and see the page reload and show the new result.
+
+> Tip: try to change the content of the console log within the `popup`, and see the popup reload and show the new result without reloading the entire extension.
 
 ## Why can't I load plugin-src/ dir?
 The source needs to be parsed and bundled by Webpack, then is outputted on the `dist` directory. This means
@@ -28,5 +59,5 @@ Webpack will rebuild all for you, triggering the WER plugin, signing the extensi
 ## Manifest and Icons
 As both manifest.json and icons aren't directly processed on the extension source, it needs to be
 copied to the final output directory `dist/`. So, if you check the `webpack.plugin.js` configuration you can
-see the [CopyWebpackPlugin](https://github.com/webpack-contrib/copy-webpack-plugin) being used to move both 
+see the [CopyWebpackPlugin](https://github.com/webpack-contrib/copy-webpack-plugin) being used to move both
 manifest and icons to the output directory.
