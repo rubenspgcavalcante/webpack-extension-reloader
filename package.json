@@ -68,7 +68,7 @@
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-logical-assignment-operators": "^7.8.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.9.6",
-    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/plugin-transform-regenerator": "^7.4.5",
     "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.6.3",
