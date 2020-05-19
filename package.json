@@ -77,7 +77,7 @@
     "@types/lodash": "^4.14.144",
     "@types/minimist": "^1.2.0",
     "@types/mocha": "^5.2.7",
-    "@types/sinon": "^7.5.0",
+    "@types/sinon": "^9.0.3",
     "@types/useragent": "^2.1.1",
     "@types/ws": "^6.0.3",
     "autoprefixer": "^9.6.5",
