@@ -66,7 +66,7 @@
   "devDependencies": {
     "@babel/core": "^7.10.2",
     "@babel/plugin-proposal-class-properties": "^7.10.1",
-    "@babel/plugin-proposal-logical-assignment-operators": "^7.2.0",
+    "@babel/plugin-proposal-logical-assignment-operators": "^7.10.1",
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-transform-regenerator": "^7.4.5",
