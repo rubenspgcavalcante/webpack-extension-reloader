@@ -1,3 +1,4 @@
+import { Compilation } from "webpack";
 import { ConcatSource, Source } from "webpack-sources";
 import { SourceFactory } from "../../typings";
 import middleWareSourceBuilder from "./middleware-source-builder";
@@ -17,10 +18,11 @@ const middlewareInjector: MiddlewareInjector = (
     name === extensionPage ||
     (extensionPage && extensionPage.includes(name));
 
-  return (assets, chunks) =>
-    chunks.reduce((prev, { name, files }) => {
+  return (assets, chunks: Compilation["chunks"]) =>
+    Array.from(chunks).reduce((prev, { name, files }) => {
       if (matchBgOrContentOrPage(name)) {
         files.forEach(entryPoint => {
+          console.log(`Entry point: ${entryPoint}`);
           if (/\.js$/.test(entryPoint)) {
             const finalSrc = sourceFactory(source, assets[entryPoint]);
             prev[entryPoint] = finalSrc;

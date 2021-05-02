@@ -17,7 +17,7 @@ export default class SignEmitter {
   private _safeSignChange: (
     reloadPage: boolean,
     onlyPageChanged: boolean,
-    onSuccess: () => void,
+    onSuccess: (val?: any) => void,
     onError: (err: Error) => void,
   ) => void;
   private _server: Server;

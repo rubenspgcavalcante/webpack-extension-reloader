@@ -12,7 +12,7 @@ declare interface IMiddlewareTemplateParams {
 
 declare type InjectMiddleware = (
   assets: Record<string, any>,
-  chunks: IWebpackChunk[],
+  chunks: Set<any>,
 ) => Record<string, any>;
 
 declare type MiddlewareInjector = (
