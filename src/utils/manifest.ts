@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import { flatMapDeep } from "lodash";
-import { Entry, Output } from "webpack";
+import { Compiler, Entry } from "webpack";
 import {
   bgScriptEntryErrorMsg,
   bgScriptManifestRequiredMsg,
@@ -8,7 +8,7 @@ import {
 
 export function extractEntries(
   webpackEntry: Entry,
-  webpackOutput: Output = {},
+  webpackOutput: Compiler["options"]["output"] = {},
   manifestPath: string,
 ): IEntriesOption {
   const manifestJson = JSON.parse(

@@ -61,7 +61,7 @@
     "ws": "^7.2.0"
   },
   "peerDependencies": {
-    "webpack": "^4"
+    "webpack": "^5.36.2"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
@@ -83,7 +83,7 @@
     "autoprefixer": "^9.6.5",
     "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
-    "copy-webpack-plugin": "^5.0.4",
+    "copy-webpack-plugin": "^8.1.1",
     "css-loader": "^3.2.0",
     "husky": "^3.0.9",
     "json-loader": "^0.5.7",
@@ -99,8 +99,8 @@
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.7.2",
-    "webpack": "^4.41.2",
+    "webpack": "5.36.2",
     "webpack-bundle-analyzer": "^3.6.0",
-    "webpack-cli": "^3.3.9"
+    "webpack-cli": "^4.6.0"
   }
 }

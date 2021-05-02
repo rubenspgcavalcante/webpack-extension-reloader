@@ -1,5 +1,5 @@
 import { merge } from "lodash";
-import { Compiler, Entry, Output, version } from "webpack";
+import { Compiler, Compilation, Chunk, Entry, version } from "webpack";
 import { changesTriggerer } from "./hot-reload";
 import { onlyOnDevelopmentMsg } from "./messages/warnings";
 import { middlewareInjector } from "./middleware";
@@ -35,14 +35,16 @@ export default class ExtensionReloaderImpl extends AbstractPluginReloader
   }
 
   public _whatChanged(
-    chunks: IWebpackChunk[],
+    chunks: Compilation["chunks"],
     { background, contentScript, extensionPage }: IEntriesOption,
   ) {
-    const changedChunks = chunks.filter(({ name, hash }) => {
-      const oldVersion = this._chunkVersions[name];
-      this._chunkVersions[name] = hash;
-      return hash !== oldVersion;
-    });
+    const changedChunks = [] as Chunk[];
+
+    for (const chunk of chunks) {
+      const oldVersion = this._chunkVersions[chunk.name];
+      this._chunkVersions[chunk.name] = chunk.hash;
+      if (chunk.hash !== oldVersion) changedChunks.push(chunk);
+    }
 
     const contentOrBgChanged = changedChunks.some(({ name }) => {
       let contentChanged = false;
@@ -57,6 +59,7 @@ export default class ExtensionReloaderImpl extends AbstractPluginReloader
       return contentChanged || bgChanged;
     });
 
+    //
     const onlyPageChanged =
       !contentOrBgChanged &&
       changedChunks.some(({ name }) => {
@@ -67,6 +70,7 @@ export default class ExtensionReloaderImpl extends AbstractPluginReloader
         } else {
           pageChanged = name === extensionPage;
         }
+        //
 
         return pageChanged;
       });
@@ -83,7 +87,7 @@ export default class ExtensionReloaderImpl extends AbstractPluginReloader
     const parsedEntries: IEntriesOption = manifest
       ? extractEntries(
           compiler.options.entry as Entry,
-          compiler.options.output as Output,
+          compiler.options.output as Compiler["options"]["output"],
           manifest,
         )
       : entries;
@@ -98,16 +102,14 @@ export default class ExtensionReloaderImpl extends AbstractPluginReloader
       };
     });
 
-    this._eventAPI.afterEmit((comp, done) => {
+    this._eventAPI.afterEmit(comp => {
       const { contentOrBgChanged, onlyPageChanged } = this._whatChanged(
         comp.chunks,
         parsedEntries,
       );
 
       if (contentOrBgChanged || onlyPageChanged) {
-        this._triggerer(onlyPageChanged)
-          .then(done)
-          .catch(done);
+        this._triggerer(onlyPageChanged);
       }
     });
   }

@@ -12,14 +12,14 @@ module.exports = (env = { analyze: false }) => ({
   target: "node",
   entry: test({ tests: "./specs/index.ts" }) || {
     [packName]: "./src/index.ts",
-    [`${packName}-cli`]: "./client/index.ts"
+    [`${packName}-cli`]: "./client/index.ts",
   },
   devtool: "inline-source-map",
   output: {
     publicPath: ".",
     path: path.resolve(__dirname, "./dist"),
     filename: "[name].js",
-    libraryTarget: "umd"
+    libraryTarget: "umd",
   },
   plugins: [
     env.analyze && isProduction(new BundleAnalyzerPlugin({ sourceMap: true })),
@@ -27,51 +27,51 @@ module.exports = (env = { analyze: false }) => ({
       banner: `/// <reference path="../typings/${packName}.d.ts" />`,
       raw: true,
       entryOnly: true,
-      include: "webpack-extension-reloader"
+      include: "webpack-extension-reloader",
     }),
     new BannerPlugin({
       banner: "#!/usr/bin/env node",
       raw: true,
       entryOnly: true,
-      include: `${packName}-cli`
-    })
+      include: `${packName}-cli`,
+    }),
   ].filter(plugin => !!plugin),
   externals: [
     ...Object.keys(pack.dependencies),
     "webpack",
-    "webpack-extension-reloader"
+    "webpack-extension-reloader",
   ],
   resolve: {
     modules: [path.resolve(__dirname, "src"), "node_modules"],
     mainFiles: ["index"],
-    extensions: [".ts", ".tsx", ".js"]
+    extensions: [".ts", ".tsx", ".js"],
   },
   optimization: {
     minimize: false,
-    nodeEnv: false
+    nodeEnv: false,
   },
   module: {
     rules: [
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loaders: ["babel-loader"]
+        loader: "babel-loader",
       },
       {
         test: /\.tsx?$/,
         exclude: /node_modules/,
-        loaders: ["babel-loader", "ts-loader"]
+        use: ["babel-loader", "ts-loader"],
       },
       {
         test: /\.json$/,
         exclude: /node_modules/,
-        loaders: ["json-loader"]
+        loader: "json-loader",
       },
       {
         test: /\.txt$/,
         exclude: /node_modules/,
-        loaders: ["raw-loader"]
-      }
-    ]
-  }
+        loader: "raw-loader",
+      },
+    ],
+  },
 });
