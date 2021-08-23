@@ -46,7 +46,7 @@ Check out [Hot reloading extensions using Webpack](https://medium.com/front-end-
 Add `webpack-extension-reloader` to the plugins section of your webpack configuration file. Note that this plugin don't outputs the manifest (at most read it to gather information).
 For outputing not only the `manifest.json` but other static files too, use `CopyWebpackPlugin`.
 ```js
-const ExtensionReloader  = require('webpack-extension-reloader');
+const ExtensionReloader = require('webpack-extension-reloader');
 
 plugins: [
   new ExtensionReloader(),
