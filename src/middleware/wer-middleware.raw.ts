@@ -5,7 +5,8 @@
 /*  This will be converted into a lodash templ., any  */
 /*  external argument must be provided using it       */
 /* -------------------------------------------------- */
-(function(window) {
+(function() {
+  try{window}catch{var window:any;}
 
   const injectionContext = {browser: null};
   (function() {
@@ -44,7 +45,7 @@
       switch (type) {
         case SIGN_RELOAD:
           logger("Detected Changes. Reloading ...");
-          reloadPage && window.location.reload();
+          reloadPage && window?.location.reload();
           break;
 
         case SIGN_LOG:
@@ -118,7 +119,7 @@
       switch (type) {
         case SIGN_CHANGE:
           logger("Detected Changes. Reloading ...");
-          reloadPage && window.location.reload();
+          reloadPage && window?.location.reload();
           break;
 
         case SIGN_LOG:
@@ -130,9 +131,9 @@
 
   // ======================= Bootstraps the middleware =========================== //
   runtime.reload
-    ? extension.getBackgroundPage() === window ? backgroundWorker(new WebSocket(wsHost)) : extensionPageWorker()
+    ? !window ? backgroundWorker(new WebSocket(wsHost)) : extensionPageWorker()
     : contentScriptWorker();
-})(window);
+})();
 
 /* ----------------------------------------------- */
 /* End of Webpack Hot Extension Middleware  */
