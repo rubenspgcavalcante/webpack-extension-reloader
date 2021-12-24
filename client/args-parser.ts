@@ -1,23 +1,14 @@
-import {
-  BACKGROUND_ENTRY,
-  CONFIG,
-  CONTENT_SCRIPT_ENTRY,
-  HELP,
-  NO_PAGE_RELOAD,
-  PORT
-} from "./args.constant";
 import { resolve } from "path";
-import {
-  DEFAULT_BACKGROUND_ENTRY,
-  DEFAULT_CONFIG,
-  DEFAULT_CONTENT_SCRIPT_ENTRY,
-  DEFAULT_PORT
-} from "../src/constants/options.constants";
 import { cwd } from "process";
-import manual from "./manual";
+import { log } from "util";
+import {
+  DEFAULT_CONFIG,
+  DEFAULT_PORT,
+} from "../src/constants/options.constants";
+import { IPluginOptions } from "../typings/webpack-extension-reloader";
+import { CONFIG, HELP, MANIFEST, NO_PAGE_RELOAD, PORT } from "./args.constant";
 import { SIG_EXIT } from "./events.constants";
-import { log, error } from "util";
-import { PluginOptions } from "webpack-extension-reloader";
+import manual from "./manual";
 
 export default (args: object) => {
   if (args[HELP]) {
@@ -27,27 +18,23 @@ export default (args: object) => {
 
   const config = args[CONFIG] || DEFAULT_CONFIG;
   const port = args[PORT] || DEFAULT_PORT;
-  const contentArg = args[CONTENT_SCRIPT_ENTRY] || DEFAULT_CONTENT_SCRIPT_ENTRY;
-  const contentScript = contentArg.includes(",")
-    ? contentArg.split(",")
-    : contentArg;
+  const manifest = args[MANIFEST] || null;
 
-  const background = args[BACKGROUND_ENTRY] || DEFAULT_BACKGROUND_ENTRY;
-  const pluginOptions: PluginOptions = {
+  const pluginOptions: IPluginOptions = {
+    manifest,
     port,
     reloadPage: !args[NO_PAGE_RELOAD],
-    entries: { contentScript, background }
   };
 
   const optPath = resolve(cwd(), config);
 
   try {
-    // tslint:disable-next-line:no-eval
+    // tslint:disable-next-line: no-eval
     const webpackConfig = eval("require")(optPath);
     return { webpackConfig, pluginOptions };
   } catch (err) {
-    error(`[Error] Couldn't require the file: ${optPath}`);
-    error(err);
+    log(`[Error] Couldn't require the file: ${optPath}`);
+    log(err);
     throw { type: SIG_EXIT, payload: 1 };
   }
 };

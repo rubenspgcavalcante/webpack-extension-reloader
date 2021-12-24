@@ -1,31 +1,24 @@
+import { log } from "util";
 import * as webpack from "webpack";
-import { Configuration } from "webpack";
 import ExtensionReloaderImpl from "../src/ExtensionReloader";
-import { error } from "util";
 import { info } from "../src/utils/logger";
-import { PluginOptions } from "webpack-extension-reloader";
+import { IPluginOptions } from "../typings/webpack-extension-reloader";
 
 export default class ExtensionCompiler {
+  private static treatErrors(err) {
+    log(err.stack || err);
+    if (err.details) {
+      log(err.details);
+    }
+  }
   private compiler;
 
-  constructor(
-    config: (env: Object, args: Array<any>) => Configuration | Configuration,
-    pluginOptions: PluginOptions
-  ) {
-    this.compiler = webpack(
-      typeof config === "function" ? config(process.env, process.argv) : config
-    );
+  constructor(config: webpack.Configuration, pluginOptions: IPluginOptions) {
+    this.compiler = webpack(config);
     new ExtensionReloaderImpl(pluginOptions).apply(this.compiler);
   }
 
-  private static treatErrors(err) {
-    error(err.stack || err);
-    if (err.details) {
-      error(err.details);
-    }
-  }
-
-  watch() {
+  public watch() {
     this.compiler.watch({}, (err, stats) => {
       if (err) {
         return ExtensionCompiler.treatErrors(err);

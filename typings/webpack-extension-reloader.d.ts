@@ -1,21 +1,21 @@
+import { Compiler } from "webpack";
+
+export interface IPluginOptions {
+  port: number;
+  reloadPage: boolean;
+  manifest?: string;
+  entries?: IEntriesOption;
+}
+
+export interface IExtensionReloaderInstance {
+  apply(compiler: Compiler): void;
+}
+
+export type ExtensionReloader = new (
+  options?: IPluginOptions,
+) => IExtensionReloaderInstance;
+
 declare module "webpack-extension-reloader" {
-  type PluginOptions = {
-    port: number;
-    reloadPage: boolean;
-    entries: EntriesOption;
-  };
-  type EntriesOption = {
-    background: string;
-    contentScript: ContentScriptOption;
-  };
-
-  type ContentScriptOption = string | Array<string>;
-
-  export default interface ExtensionReloader {
-    new (options?: PluginOptions): ExtensionReloaderInstance;
-  }
-
-  export interface ExtensionReloaderInstance {
-    apply(compiler: Object): void;
-  }
+  export default ExtensionReloader;
+  export = IExtensionReloaderInstance;
 }
